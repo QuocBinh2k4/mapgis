@@ -9,7 +9,7 @@ async function main() {
         const requiredTables = ['app_users','app_sessions','app_login_challenges','user_favorites','admin_audit_logs'];
         const tables = (await app.locals.pool.query("SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename=ANY($1)",[requiredTables])).rows;
         assert.equal(tables.length, requiredTables.length, 'Thiếu bảng tài khoản; chạy npm run db:init.');
-        for (const route of ['/','/account','/admin','/js/auth.js','/js/favorites.js','/js/account.js','/js/admin.js','/css/accounts.css']) {
+        for (const route of ['/','/account','/admin','/js/auth.js','/js/favorites.js','/js/map-layers.js','/js/account.js','/js/admin.js','/css/accounts.css']) {
             const response = await fetch(base + route);
             assert.equal(response.status, 200, route);
             assert.ok((await response.text()).length > 100, route);

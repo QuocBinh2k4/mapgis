@@ -14,6 +14,8 @@ Nếu đã có `.env` thì chỉnh file hiện có, không ghi đè. Trên Verce
 
 Trang `/account` cho phép đăng ký/đăng nhập Google, cập nhật tên và quản lý điểm đến đã lưu. Trang `/admin` quản lý người dùng, quyền truy cập, phiên đăng nhập, điểm du lịch và nhật ký thay đổi. Mã đăng nhập đã được tích hợp; cần điền `GOOGLE_CLIENT_ID`, `APP_ORIGIN` và `ADMIN_EMAILS` để sử dụng tài khoản Google thật.
 
+Giao diện hỗ trợ máy tính và điện thoại, kể cả khi xoay ngang. Trên điện thoại, nút **Điểm đến** mở bảng danh sách có nút đóng; dữ liệu admin hiển thị thành thẻ. Nút **Lớp bản đồ** ở góc dưới trái cho phép chọn Đường phố/Vệ tinh/Địa hình. Chú thích ở sát góc dưới phải, phía trên nguồn bản đồ; bảng lớp mở trên màn hình hẹp sẽ tạm ẩn các điều khiển phía sau để tránh chồng lấn.
+
 ```powershell
 npm run db:init
 npm start

@@ -46,7 +46,8 @@
                     await render();message('Đăng nhập thành công. Chào mừng bạn trở lại!');
                 } catch(error) {message(error.message);byId('login-retry').hidden=false;}
             }});
-            window.google.accounts.id.renderButton(byId('google-button'),{theme:'outline',size:'large',text:'continue_with',shape:'pill',locale:'vi',width:280});
+            const width=Math.min(280,byId('google-button').clientWidth || 280);
+            window.google.accounts.id.renderButton(byId('google-button'),{theme:'outline',size:'large',text:'continue_with',shape:'pill',locale:'vi',width});
             message('Chọn Google để đăng nhập hoặc tạo tài khoản.');
         } catch(error) {message(error.message);byId('login-retry').hidden=false;}
     }

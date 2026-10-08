@@ -5,12 +5,13 @@
     const list = document.getElementById('result-list');
     const count = document.getElementById('result-count');
     const search = document.getElementById('searchInput');
-    const mobile = window.matchMedia('(max-width: 640px)');
+    const mobile = window.matchMedia('(max-width: 760px), (max-height: 500px) and (pointer: coarse)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const guide = document.getElementById('guide');
     let map;
     let markerGroup;
     let routingUI;
+    let mapLayers;
     let provinceLayer;
     let selectedLayer;
     let selectedProvince = '';
@@ -43,8 +44,12 @@
     function setSidebar(open) {
         sidebar.classList.toggle('collapsed', !open);
         sidebar.inert = !open;
+        document.getElementById('app-container').classList.toggle('sidebar-open', open);
+        document.getElementById('sidebar-backdrop').hidden = !open || !mobile.matches;
+        if (open && mobile.matches) mapLayers?.close();
         toggle.setAttribute('aria-expanded', String(open));
         toggle.title = open ? 'Ẩn danh sách điểm đến' : 'Mở danh sách điểm đến';
+        toggle.setAttribute('aria-label', toggle.title);
         if (map) setTimeout(() => map.invalidateSize(), reducedMotion.matches ? 0 : 320);
     }
     toggle.addEventListener('click', () => setSidebar(sidebar.classList.contains('collapsed')));
@@ -52,6 +57,7 @@
         setSidebar(false);
         toggle.focus();
     });
+    document.getElementById('sidebar-backdrop').addEventListener('click', () => { setSidebar(false); toggle.focus(); });
     setSidebar(!mobile.matches);
     mobile.addEventListener('change', () => setSidebar(!mobile.matches));
     document.getElementById('guide-link').addEventListener('click', event => {
@@ -295,7 +301,7 @@
     });
     map.attributionControl.addAttribution('Điểm đến &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>');
     L.control.zoom({ position: 'topright' }).addTo(map);
-    L.control.layers({ 'Bản đồ đường phố': street, 'Ảnh vệ tinh': satellite, 'Bản đồ địa hình': terrain }, null, { position: 'bottomleft' }).addTo(map);
+    if (window.createMapLayers) mapLayers = window.createMapLayers(map, { street, satellite, terrain });
     if (window.ResizeObserver) new ResizeObserver(() => map.invalidateSize()).observe(document.getElementById('map-container'));
     async function getFeatures(path) {
         const controller = new AbortController();

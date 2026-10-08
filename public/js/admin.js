@@ -53,6 +53,8 @@
                     const labels={create_tourism:'Thêm điểm du lịch',update_tourism:'Sửa điểm du lịch',archive_tourism:'Ẩn điểm du lịch',restore_tourism:'Khôi phục điểm du lịch',update_user:'Cập nhật tài khoản',revoke_sessions:'Kết thúc phiên đăng nhập',remove_favorite:'Bỏ lưu điểm đến',bootstrap_admin:'Cấp quyền quản trị ban đầu'};
                     row.append(element('td',dates(item.created_at)),element('td',item.actor_name),element('td',labels[item.action] || item.action),element('td',`${item.resource_type==='user'?'Tài khoản':'Điểm du lịch'} · ${item.resource_id}`));
                 }
+                const headings=document.querySelectorAll(`#${tab}-section thead th`);
+                Array.from(row.children).forEach((cell,index)=>{cell.dataset.label=headings[index]?.textContent || '';});
                 rows.append(row);
             });
         }catch(error){if(!denied(error)) {emptyRows(`${tab}-rows`,tab==='users'?5:4,error.message);message(error.message,true);}}

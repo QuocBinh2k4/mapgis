@@ -14,7 +14,7 @@
         let chosenOrigin = null, locationSerial = 0;
         const nodes = ['explore-tools','destinations'].map(byId);
         const header = document.querySelector('.sidebar-header');
-        const compact = window.matchMedia('(max-width: 640px)');
+        const compact = window.matchMedia('(max-width: 760px), (max-height: 500px) and (pointer: coarse)');
         const distance = meters => meters < 1000 ? `${Math.round(meters)} m` : `${(meters/1000).toLocaleString('vi-VN',{maximumFractionDigits:1})} km`;
         const duration = seconds => {
             if (seconds === 0) return '0 phút';
