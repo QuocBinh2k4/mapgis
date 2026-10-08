@@ -15,6 +15,8 @@
     let selectedLayer;
     let selectedProvince = '';
     let selectedType = 'all';
+    const favorites = window.MapFavorites;
+    let favoritesOnly = new URLSearchParams(location.search).get('view') === 'favorites';
     let spots = [];
     let loadState = 'loading';
     const pageSize = 40;
@@ -106,6 +108,8 @@
         return image;
     }
     function focusSpot(spot) {
+        // Đưa marker trở lại nhóm nếu bộ lọc hiện tại đang ẩn điểm được mở từ liên kết.
+        if (!markerGroup.hasLayer(spot.marker)) markerGroup.addLayer(spot.marker);
         if (mobile.matches) {
             setSidebar(false);
             toggle.focus();
@@ -120,11 +124,16 @@
         const query = normalize(search.value);
         const visible = spots.filter(spot => {
             const props = spot.feature.properties;
-            return (selectedType === 'all' || props.ma_loai === selectedType)
+            return (!favoritesOnly || (favorites.status === 'ready' && favorites.has(props.id)))
+                && (selectedType === 'all' || props.ma_loai === selectedType)
                 && (!selectedProvince || normalize(props.ten_tinh) === normalize(selectedProvince))
                 && (!query || normalize(`${props.ten_dia_diem || ''} ${props.ten_tinh || ''}`).includes(query));
         });
         const visibleSet = new Set(visible);
+        if (favoritesOnly) {
+            const order = new Map(favorites.orderedIds.map((id, index) => [id, index]));
+            visible.sort((a, b) => order.get(a.feature.properties.id) - order.get(b.feature.properties.id));
+        }
         if (resetPage) {
             const add = [];
             const remove = [];
@@ -140,8 +149,30 @@
         }
         count.textContent = `${visible.length} điểm đến`;
         list.setAttribute('aria-busy', 'false');
+        if (favoritesOnly && favorites.status !== 'ready') {
+            const state = element('div', 'empty-state');
+            state.append(icon('fa-heart'));
+            if (favorites.status === 'guest') {
+                count.textContent = 'Chưa đăng nhập';
+                state.append(element('h3', '', 'Lưu những nơi bạn muốn đến'), element('p', '', 'Đăng nhập để xem danh sách địa điểm yêu thích của bạn.'));
+                const login = element('a', 'secondary-button favorite-login', 'Đăng nhập bằng Google');
+                login.href = '/account?return=' + encodeURIComponent('/?view=favorites');
+                state.append(login);
+            } else if (favorites.status === 'loading') {
+                count.textContent = 'Đang tải…';
+                list.setAttribute('aria-busy', 'true');
+                state.append(element('h3', '', 'Đang tải địa điểm yêu thích…'));
+            } else {
+                count.textContent = 'Chưa kết nối';
+                state.append(element('h3', '', 'Chưa tải được danh sách yêu thích'), element('p', '', 'Vui lòng kiểm tra kết nối và thử lại.'));
+                const retry = element('button', 'retry-button', 'Thử lại');
+                retry.type = 'button'; retry.addEventListener('click', () => favorites.refresh()); state.append(retry);
+            }
+            list.replaceChildren(state); return;
+        }
         if (!visible.length) {
-            showEmpty('Chưa tìm thấy điểm đến', spots.length ? 'Thử từ khóa khác, chọn “Tất cả” hoặc bỏ lọc tỉnh thành.' : 'Chưa có điểm du lịch trong dữ liệu. Hãy quay lại sau nhé.');
+            if (favoritesOnly && !favorites.count) showEmpty('Chưa có địa điểm yêu thích', 'Mở một điểm trên bản đồ và chọn “Thêm vào yêu thích” để lưu cho chuyến đi tiếp theo.');
+            else showEmpty('Chưa tìm thấy điểm đến', spots.length ? 'Thử từ khóa khác, chọn “Tất cả” hoặc bỏ lọc tỉnh thành.' : 'Chưa có điểm du lịch trong dữ liệu. Hãy quay lại sau nhé.');
             return;
         }
         const cards = visible.slice(0, visibleLimit).map(spot => {
@@ -165,7 +196,16 @@
             info.append(location);
             card.append(thumbnail, info);
             card.addEventListener('click', () => focusSpot(spot));
-            return card;
+            if (!favoritesOnly) return card;
+            const savedCard = element('div', 'favorite-result');
+            const remove = element('button', 'text-button favorite-remove', 'Bỏ yêu thích');
+            remove.type = 'button'; remove.disabled = favorites.isPending(props.id);
+            remove.setAttribute('aria-label', `Bỏ yêu thích ${props.ten_dia_diem || 'điểm du lịch'}`);
+            remove.addEventListener('click', async () => {
+                try { await favorites.setSaved(props.id, false); message('Đã bỏ địa điểm khỏi danh sách yêu thích.'); }
+                catch (error) { message(error.message); }
+            });
+            savedCard.append(card, remove); return savedCard;
         });
         list.replaceChildren(...cards);
         if (visible.length > visibleLimit) {
@@ -181,6 +221,30 @@
         }
     }
     document.getElementById('search-form').addEventListener('submit', event => { event.preventDefault(); renderSpots(); });
+    function updateFavoriteViews() {
+        document.getElementById('favorites-count').textContent = favorites.status === 'loading' ? '…' : favorites.status === 'error' ? '!' : favorites.count;
+        document.getElementById('results-heading').textContent = favoritesOnly ? 'Địa điểm yêu thích của bạn' : 'Điểm đến dành cho bạn';
+        for (const [id, active] of [['view-explore', !favoritesOnly], ['view-favorites', favoritesOnly]]) {
+            const button = document.getElementById(id);
+            button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active));
+        }
+        spots.forEach(spot => {
+            const button = spot.favoriteButton;
+            if (!button) return;
+            const saved = favorites.has(spot.feature.properties.id);
+            button.textContent = saved ? 'Bỏ yêu thích' : 'Thêm vào yêu thích';
+            button.setAttribute('aria-pressed', String(saved));
+            button.disabled = favorites.status === 'loading' || favorites.isPending(spot.feature.properties.id);
+        });
+    }
+    document.getElementById('view-explore').addEventListener('click', () => { favoritesOnly = false; updateFavoriteViews(); renderSpots(); });
+    document.getElementById('view-favorites').addEventListener('click', () => {
+        favoritesOnly = true; search.value = ''; selectedType = 'all';
+        document.querySelectorAll('.tag').forEach(tag => { const active = tag.dataset.type === 'all'; tag.classList.toggle('active', active); tag.setAttribute('aria-pressed', String(active)); });
+        updateFavoriteViews(); clearProvince();
+    });
+    window.addEventListener('mapgis-favorites-change', () => { updateFavoriteViews(); if (favoritesOnly) renderSpots(); });
+    updateFavoriteViews();
     search.addEventListener('input', renderSpots);
     document.querySelectorAll('.tag').forEach(button => button.addEventListener('click', () => {
         selectedType = button.dataset.type;
@@ -313,24 +377,31 @@
                     directions.addEventListener('click', () => routingUI.open(feature));
                     popup.append(directions);
                 }
-                if (window.MapAuth) {
-                    const save=element('button','secondary-button popup-directions','Lưu điểm đến');save.type='button';
+                let favoriteButton;
+                if (favorites) {
+                    const save=element('button','secondary-button popup-directions','Thêm vào yêu thích');save.type='button';
+                    favoriteButton=save;
                     save.addEventListener('click',async()=>{
                         save.disabled=true;
                         try {
-                            await window.MapAuth.ready;
+                            await favorites.ready;
                             if(!window.MapAuth.user){location.assign(`/account?return=${encodeURIComponent(`/?place=${props.id}`)}`);return;}
-                            await window.MapAuth.request(`/api/me/favorites/${props.id}`,{method:'PUT'});save.textContent='Đã lưu điểm đến';
-                        }catch(error){save.textContent=error.message;}finally{save.disabled=false;}
+                            if(favorites.status==='error') await favorites.refresh();
+                            if(favorites.status!=='ready') throw new Error('Chưa tải được danh sách yêu thích. Vui lòng thử lại.');
+                            const saved=!favorites.has(props.id);
+                            await favorites.setSaved(props.id,saved);
+                            message(saved?'Đã thêm địa điểm vào danh sách yêu thích.':'Đã bỏ địa điểm khỏi danh sách yêu thích.');
+                        }catch(error){message(error.message);}finally{updateFavoriteViews();}
                     });popup.append(save);
                 }
                 marker.bindPopup(popup).bindTooltip(element('span', '', props.ten_dia_diem || 'Điểm du lịch'), { direction: 'top', offset: [0, -15] });
                 marker.on('click', event => {
                     if (routingUI?.pickStart(event.latlng)) map.closePopup();
                 });
-                spots.push({ feature, marker });
+                spots.push({ feature, marker, favoriteButton });
             });
             loadState = 'ready';
+            updateFavoriteViews();
             renderSpots();
             const requested=Number(new URLSearchParams(location.search).get('place'));
             const selected=spots.find(spot=>spot.feature.properties.id===requested);

@@ -9,6 +9,7 @@
     "users:admin": "node scripts/grant-admin.js",
     "users:test": "node --test tests/accounts.test.js",
     "users:verify": "node scripts/verify-accounts.js",
+    "favorites:test": "node --test tests/favorites-ui.test.js",
     "boundaries:download": "node scripts/download-boundaries.js",
     "boundaries:preview": "node scripts/import-boundaries.js",
     "boundaries:import": "node scripts/import-boundaries.js --apply",

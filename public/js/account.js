@@ -13,7 +13,7 @@
         try {
             const data=await auth.request('/api/me/favorites');
             list.replaceChildren();
-            if (!data.items.length) {list.append(element('p','Chưa có điểm đến đã lưu. Mở một địa điểm trên bản đồ và chọn “Lưu điểm đến”.','muted'));return;}
+            if (!data.items.length) {list.append(element('p','Chưa có địa điểm yêu thích. Mở một địa điểm trên bản đồ và chọn “Thêm vào yêu thích”.','muted'));return;}
             data.items.forEach(place=>{
                 const card=element('article','','favorite-item'), info=element('div');
                 const link=element('a',place.ten_dia_diem);link.href=`/?place=${place.id}`;

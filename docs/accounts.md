@@ -66,7 +66,8 @@ erDiagram
 
 ## Sử dụng
 
-- `/account`: sửa tên hiển thị, xem/bỏ lưu điểm đến và đăng xuất. Nút **Lưu điểm đến** nằm trong popup địa điểm trên bản đồ. Lần đăng nhập đầu tạo tài khoản tự động.
+- Bản đồ → **Yêu thích**: xem các điểm đã lưu và số lượng, lọc theo tên/tỉnh/loại hình, mở điểm trên bản đồ, chỉ đường hoặc bỏ yêu thích. Nút **Thêm vào yêu thích/Bỏ yêu thích** nằm trong popup địa điểm; danh sách và dấu ghim cập nhật ngay sau thao tác. Chưa đăng nhập sẽ hiển thị liên kết đăng nhập.
+- `/account`: sửa tên hiển thị, xem/bỏ lưu điểm đến và đăng xuất. Liên kết **Xem trên bản đồ** mở thẳng danh sách yêu thích. Lần đăng nhập đầu tạo tài khoản tự động.
 - `/admin` → **Người dùng**: tìm theo tên/email, đổi tên, cấp/hạ quyền, khóa/mở khóa, lưu trữ/khôi phục tài khoản, thu hồi phiên và xem/bỏ các điểm đã lưu của người dùng. Email được đồng bộ từ Google và không sửa thủ công.
 - `/admin` → **Điểm du lịch**: tìm kiếm, lọc tỉnh/trạng thái, thêm/sửa tên, loại hình, địa chỉ, mô tả, ảnh và vị trí; chọn tọa độ trên bản đồ hoặc nhập trực tiếp. Server tự xác định tỉnh từ ranh giới PostGIS.
 - **Ẩn/Khôi phục** điểm du lịch dùng `deleted_at`. Điểm ẩn không xuất hiện trên API bản đồ, danh sách yêu thích cá nhân hoặc tìm đường. Liên kết nguồn OSM và dữ liệu đã lưu vẫn được giữ để khôi phục.
@@ -96,6 +97,7 @@ Khóa/lưu trữ người dùng hoặc đổi quyền sẽ thu hồi phiên. Kh�
 
 ```powershell
 npm run users:test
+npm run favorites:test
 npm run users:verify
 npm run data:test
 npm run roads:test
@@ -105,3 +107,5 @@ npm run data:verify
 `users:test` kiểm tra đăng ký, phiên, CSRF, phân quyền, yêu thích và thêm/sửa/ẩn/khôi phục điểm du lịch trên schema riêng trong transaction rollback của database cấu hình. Nó dùng bộ xác minh token giả lập trong fixture kiểm thử và không thay đổi tài khoản/dữ liệu thật. Đăng nhập Google thật cần Client ID hợp lệ và phải thử trực tiếp trên `/account` sau khi cấu hình.
 
 `users:verify` kiểm tra các bảng trên Neon, truy cập trang/asset, chặn API riêng khi chưa đăng nhập và đối chiếu số điểm/tỉnh hiển thị với database. Nếu Google đã cấu hình, lệnh tạo thử thách đăng nhập ngắn hạn; không tạo người dùng hoặc sửa điểm du lịch.
+
+`favorites:test` kiểm tra thêm/bỏ yêu thích, bộ lọc danh sách và dấu ghim, nút đăng nhập, và loại bỏ phản hồi cũ khi đăng xuất/chuyển tài khoản bằng fixture DOM và API.

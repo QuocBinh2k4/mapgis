@@ -38,6 +38,10 @@
                 <div class="hero-decoration" aria-hidden="true"><i class="fa-solid fa-mountain-sun"></i></div>
             </div>
             <section class="explore-tools" id="explore-tools" aria-labelledby="search-heading">
+                <div class="destination-views" role="group" aria-label="Danh sách địa điểm">
+                    <button type="button" id="view-explore" class="destination-view active" aria-pressed="true" aria-controls="destinations">Khám phá</button>
+                    <button type="button" id="view-favorites" class="destination-view" aria-pressed="false" aria-controls="destinations"><i class="fa-regular fa-heart" aria-hidden="true"></i> Yêu thích <span id="favorites-count">0</span></button>
+                </div>
                 <h2 id="search-heading">Bạn muốn đi đâu?</h2>
                 <form class="search-box" id="search-form" role="search">
                     <label class="sr-only" for="searchInput">Tên điểm đến hoặc tỉnh, thành phố</label>
@@ -115,6 +119,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/favorites.js"></script>
     <script src="js/routing.js"></script>
     <script src="js/app.js"></script>
 </body>
