@@ -1,4 +1,6 @@
 const { createClient } = require('./db');
+const fs = require('fs');
+const path = require('path');
 
 async function ensureSchema(client) {
     await client.query(`CREATE EXTENSION IF NOT EXISTS postgis;
@@ -18,11 +20,12 @@ async function ensureSchema(client) {
         );
         CREATE INDEX IF NOT EXISTS ranh_gioi_tinh_geom_idx ON ranh_gioi_tinh USING gist(geom);
         CREATE INDEX IF NOT EXISTS diem_du_lich_geom_idx ON diem_du_lich USING gist(geom);`);
+    await client.query(fs.readFileSync(path.join(__dirname, '..', 'sql', 'users-admin.sql'), 'utf8'));
 }
 if (require.main === module) {
     (async () => {
         const client = createClient();
-        try { await client.connect(); await client.query('BEGIN'); await ensureSchema(client); await client.query('COMMIT'); console.log('Đã tạo schema PostGIS.'); }
+        try { await client.connect(); await client.query('BEGIN'); await ensureSchema(client); await client.query('COMMIT'); console.log('Đã cập nhật schema bản đồ, tài khoản và quản trị.'); }
         catch (error) { await client.query('ROLLBACK').catch(() => {}); throw error; }
         finally { await client.end(); }
     })().catch(error => { console.error(error.message); process.exitCode = 1; });

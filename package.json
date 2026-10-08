@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "db:init": "node scripts/schema.js",
+    "users:admin": "node scripts/grant-admin.js",
+    "users:test": "node --test tests/accounts.test.js",
+    "users:verify": "node scripts/verify-accounts.js",
     "boundaries:download": "node scripts/download-boundaries.js",
     "boundaries:preview": "node scripts/import-boundaries.js",
     "boundaries:import": "node scripts/import-boundaries.js --apply",
@@ -28,6 +31,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "google-auth-library": "^11.2.0",
     "pg": "^8.23.0"
   },
   "devDependencies": {

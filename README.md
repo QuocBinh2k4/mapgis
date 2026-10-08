@@ -1,4 +1,4 @@
-    # MapGIS — dữ liệu Neon và bản đồ web
+# MapGIS — dữ liệu Neon và bản đồ web
 
 Yêu cầu Node.js 22 trở lên và PostgreSQL/Neon có PostGIS. Web và các script dùng cùng `DATABASE_URL` từ môi trường hoặc `.env`, không lưu mật khẩu trong mã nguồn. Biến môi trường triển khai được ưu tiên hơn `.env`.
 
@@ -9,6 +9,17 @@ Copy-Item .env.example .env
 ```
 
 Nếu đã có `.env` thì chỉnh file hiện có, không ghi đè. Trên Vercel, thêm `DATABASE_URL` trong Environment Variables rồi redeploy. `.env` không được đưa lên Git. Đường dẫn kết nối phải có SSL, ví dụ `?sslmode=verify-full`.
+
+## Tài khoản Google và trang admin
+
+Trang `/account` cho phép đăng ký/đăng nhập Google, cập nhật tên và quản lý điểm đến đã lưu. Trang `/admin` quản lý người dùng, quyền truy cập, phiên đăng nhập, điểm du lịch và nhật ký thay đổi. Mã đăng nhập đã được tích hợp; cần điền `GOOGLE_CLIENT_ID`, `APP_ORIGIN` và `ADMIN_EMAILS` để sử dụng tài khoản Google thật.
+
+```powershell
+npm run db:init
+npm start
+```
+
+Migration trong `sql/users-admin.sql` tạo thêm bảng tài khoản trên cùng database Neon và bổ sung trường quản trị vào `diem_du_lich`. Xem [hướng dẫn cấu hình Google, cấp quyền admin và mô hình database](docs/accounts.md).
 
 ## Nhập dữ liệu lần đầu
 

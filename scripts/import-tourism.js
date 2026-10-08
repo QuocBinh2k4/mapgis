@@ -178,7 +178,8 @@ async function main() {
                     ON CONFLICT(nguon_du_lieu,nguon_id) WHERE nguon_du_lieu IS NOT NULL AND nguon_id IS NOT NULL
                     DO UPDATE SET ten_dia_diem=EXCLUDED.ten_dia_diem,loai_id=EXCLUDED.loai_id,ma_tinh=EXCLUDED.ma_tinh,
                         dia_chi=EXCLUDED.dia_chi,mo_ta_ngan=EXCLUDED.mo_ta_ngan,hinh_anh_url=EXCLUDED.hinh_anh_url,
-                        geom=EXCLUDED.geom,ngay_nhap_du_lieu=EXCLUDED.ngay_nhap_du_lieu,thong_tin_nguon=EXCLUDED.thong_tin_nguon
+                        geom=EXCLUDED.geom,ngay_nhap_du_lieu=EXCLUDED.ngay_nhap_du_lieu,thong_tin_nguon=EXCLUDED.thong_tin_nguon,
+                        updated_at=now(),updated_by=NULL,version=diem_du_lich.version+1
                     RETURNING id,nguon_id`, [JSON.stringify(toSave.slice(offset, offset + 500))]);
                 for (const row of saved.rows) targets.set(row.nguon_id, row.id);
             }
@@ -211,7 +212,8 @@ async function main() {
                 const secondPlan = planTourism(mapped, saved, normalize);
                 if (secondPlan.some(p => p.status === 'inserted')) throw new Error('Chạy lại vẫn tạo điểm trùng');
                 report.repeatImportAddsZero = true;
-                report.api = await require('./check-web-data').checkWebData(client, report.after);
+                const visible=Number((await client.query('SELECT count(*) AS n FROM diem_du_lich WHERE geom IS NOT NULL AND deleted_at IS NULL')).rows[0].n);
+                report.api = await require('./check-web-data').checkWebData(client, visible);
             }
             await client.query(validate ? 'ROLLBACK' : 'COMMIT');
             committed = !validate;

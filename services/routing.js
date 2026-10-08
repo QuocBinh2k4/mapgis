@@ -147,7 +147,7 @@ async function route(pool,body,signal) {
         await client.query("SET LOCAL statement_timeout='35s'");
         const available=(await client.query("SELECT to_regclass('routing.edges') AS edges,to_regclass('routing.turns') AS turns,to_regclass('routing.imports') AS imports")).rows[0];
         if(!available.edges || !available.turns || !available.imports) throw new RouteError('Dữ liệu đường chưa được nhập đầy đủ vào máy chủ.',503);
-        const destination=(await client.query('SELECT id,ten_dia_diem,ST_X(ST_Transform(geom,4326)) AS lng,ST_Y(ST_Transform(geom,4326)) AS lat FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL',[destinationId])).rows[0];
+        const destination=(await client.query('SELECT id,ten_dia_diem,ST_X(ST_Transform(geom,4326)) AS lng,ST_Y(ST_Transform(geom,4326)) AS lat FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL AND deleted_at IS NULL',[destinationId])).rows[0];
         if(!destination) throw new RouteError('Không tìm thấy điểm du lịch.',404);
         const end={lat:destination.lat,lng:destination.lng};
         const startSnap=await nearestEdge(client,start,mode,'Điểm xuất phát');

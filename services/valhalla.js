@@ -55,7 +55,7 @@ function convertTrip(trip, id) {
 async function routeValhalla(pool, body, signal, validateRequest) {
     const { start, destinationId, mode } = validateRequest(body);
     const destination = (await pool.query(`SELECT id,ten_dia_diem,ST_X(ST_Transform(geom,4326)) AS lng,ST_Y(ST_Transform(geom,4326)) AS lat
-        FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL`, [destinationId])).rows[0];
+        FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL AND deleted_at IS NULL`, [destinationId])).rows[0];
     if (!destination) throw new ProviderError('Không tìm thấy điểm du lịch.', 404);
     const target = { id: destination.id, name: destination.ten_dia_diem, lat: destination.lat, lng: destination.lng };
     const url = endpoint();

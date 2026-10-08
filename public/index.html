@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/accounts.css">
 </head>
 <body>
     <a class="skip-link" href="#searchInput">Đến phần tìm kiếm điểm đến</a>
@@ -22,6 +23,8 @@
         <nav aria-label="Điều hướng chính">
             <a class="nav-link current" href="#map-container" aria-current="page">Khám phá bản đồ</a>
             <a class="nav-link" href="#guide" id="guide-link">Cách khám phá</a>
+            <a class="nav-link" href="/admin" id="admin-link" hidden>Quản trị</a>
+            <a class="nav-link header-account" href="/account" id="auth-link">Đăng nhập</a>
         </nav>
         <span class="header-note"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Hành trình Việt Nam</span>
     </header>
@@ -111,6 +114,7 @@
     </dialog>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/routing.js"></script>
     <script src="js/app.js"></script>
 </body>

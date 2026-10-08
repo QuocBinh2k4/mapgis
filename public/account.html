@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản — Việt Nam Ơi</title>
+    <link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/accounts.css">
+</head>
+<body class="account-body">
+    <header class="site-header"><a class="brand" href="/"><span class="brand-icon" aria-hidden="true">✦</span><span><strong>Việt Nam Ơi<span class="brand-dot">.</span></strong><small>Mỗi điểm đến, một câu chuyện</small></span></a><nav aria-label="Điều hướng"><a href="/" class="nav-link">Bản đồ</a><a href="/admin" id="admin-link" class="nav-link" hidden>Quản trị</a><a href="/account" id="auth-link" class="nav-link current" aria-current="page">Tài khoản</a></nav></header>
+    <main class="account-main">
+        <div class="page-intro"><span class="eyebrow">HÀNH TRÌNH CỦA BẠN</span><h1>Gặp lại những điểm đến yêu thích.</h1><p>Đăng nhập để lưu địa điểm và quản lý thông tin tài khoản.</p></div>
+        <p id="account-message" class="notice" role="status" aria-live="polite">Đang kiểm tra tài khoản…</p>
+        <section id="login-section" class="account-card login-card" hidden>
+            <span class="card-kicker">BẮT ĐẦU KHÁM PHÁ</span><h2>Đăng nhập bằng Google</h2><p>Lần đầu đăng nhập sẽ tự tạo tài khoản. Chúng tôi dùng tên, email và ảnh đại diện Google cho hồ sơ của bạn.</p>
+            <div id="google-button"></div><button type="button" id="login-retry" class="secondary-button" hidden>Thử lại</button>
+        </section>
+        <div id="member-section" class="account-columns" hidden>
+            <section class="account-card"><h2>Thông tin của bạn</h2><p id="account-role" class="muted"></p>
+                <form id="profile-form" class="editor-form"><label>Tên hiển thị<input name="display_name" id="profile-name" maxlength="120" required></label><label>Email Google<input id="profile-email" readonly></label><p class="muted">Email được đồng bộ từ tài khoản Google khi đăng nhập.</p><button class="primary-button" type="submit">Lưu thông tin</button></form>
+                <a href="/admin" id="account-admin" class="secondary-button" hidden>Mở trang quản trị</a><button type="button" id="account-logout" class="text-button danger-text">Đăng xuất</button>
+            </section>
+            <section class="account-card favorites-card"><div class="card-heading"><h2>Điểm đến đã lưu</h2><a href="/">Khám phá thêm →</a></div><div id="favorite-list" class="favorite-list"></div></section>
+        </div>
+    </main>
+    <script src="/js/auth.js"></script><script src="/js/account.js"></script>
+</body>
+</html>

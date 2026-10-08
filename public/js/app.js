@@ -313,6 +313,17 @@
                     directions.addEventListener('click', () => routingUI.open(feature));
                     popup.append(directions);
                 }
+                if (window.MapAuth) {
+                    const save=element('button','secondary-button popup-directions','Lưu điểm đến');save.type='button';
+                    save.addEventListener('click',async()=>{
+                        save.disabled=true;
+                        try {
+                            await window.MapAuth.ready;
+                            if(!window.MapAuth.user){location.assign(`/account?return=${encodeURIComponent(`/?place=${props.id}`)}`);return;}
+                            await window.MapAuth.request(`/api/me/favorites/${props.id}`,{method:'PUT'});save.textContent='Đã lưu điểm đến';
+                        }catch(error){save.textContent=error.message;}finally{save.disabled=false;}
+                    });popup.append(save);
+                }
                 marker.bindPopup(popup).bindTooltip(element('span', '', props.ten_dia_diem || 'Điểm du lịch'), { direction: 'top', offset: [0, -15] });
                 marker.on('click', event => {
                     if (routingUI?.pickStart(event.latlng)) map.closePopup();
@@ -321,6 +332,9 @@
             });
             loadState = 'ready';
             renderSpots();
+            const requested=Number(new URLSearchParams(location.search).get('place'));
+            const selected=spots.find(spot=>spot.feature.properties.id===requested);
+            if(selected)focusSpot(selected);
         } catch (error) {
             loadState = 'error';
             count.textContent = 'Chưa kết nối';

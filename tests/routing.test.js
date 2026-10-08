@@ -45,9 +45,9 @@ test('full route splits a shared road at both endpoints and respects vehicle dir
             CREATE TEMP TABLE fixture_edges(id bigint,osm_way_id bigint,source bigint,target bigint,name text,highway text,geom geometry(LineString,4326),${permissions},tags jsonb,length_m float8) ON COMMIT DROP;
             CREATE TEMP TABLE fixture_turns(from_edge bigint,to_edge bigint,via_node bigint,mode text) ON COMMIT DROP;
             CREATE TEMP TABLE fixture_imports(imported_at timestamptz,source jsonb) ON COMMIT DROP;
-            CREATE TEMP TABLE fixture_destinations(id integer,ten_dia_diem text,geom geometry(Point,4326)) ON COMMIT DROP;
+            CREATE TEMP TABLE fixture_destinations(id integer,ten_dia_diem text,geom geometry(Point,4326),deleted_at timestamptz) ON COMMIT DROP;
             INSERT INTO fixture_edges VALUES(1,100,1,2,'Đường thử','residential',ST_GeomFromText('LINESTRING(105 21,105.01 21)',4326),true,false,30,true,false,25,true,true,16,true,true,4.5,'{}',1000);
-            INSERT INTO fixture_destinations VALUES(1,'Điểm thử',ST_SetSRID(ST_MakePoint(105.0075,21),4326));
+            INSERT INTO fixture_destinations(id,ten_dia_diem,geom) VALUES(1,'Điểm thử',ST_SetSRID(ST_MakePoint(105.0075,21),4326));
             INSERT INTO fixture_imports VALUES(now(),'{}')`);
         const rewrite = sql => sql.replaceAll('routing.edges','pg_temp.fixture_edges').replaceAll('routing.turns','pg_temp.fixture_turns').replaceAll('routing.imports','pg_temp.fixture_imports').replaceAll('diem_du_lich','pg_temp.fixture_destinations');
         const query = async (sql, values) => {
