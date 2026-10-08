@@ -10,14 +10,14 @@
     "count": 10460,
     "query": "[out:json][timeout:180];\narea[\"ISO3166-1\"=\"VN\"][\"admin_level\"=\"2\"]->.vn;\n(\n nwr(area.vn)[\"name\"][\"historic\"~\"^(archaeological_site|battlefield|castle|fort|manor|memorial|monument|ruins|city_gate|temple|tomb|building|heritage)$\"];\n nwr(area.vn)[\"name\"][\"tourism\"~\"^(attraction|viewpoint|museum|theme_park|zoo|aquarium|gallery)$\"];\n nwr(area.vn)[\"name\"][\"amenity\"=\"place_of_worship\"];\n nwr(area.vn)[\"name\"][\"natural\"~\"^(peak|cave_entrance|beach)$\"];\n nwr(area.vn)[\"name\"][\"waterway\"=\"waterfall\"];\n nwr(area.vn)[\"name\"][\"leisure\"~\"^(resort|nature_reserve)$\"];\n nwr(area.vn)[\"name\"][\"boundary\"=\"national_park\"];\n);\nout center tags;"
   },
-  "startedAt": "2026-10-08T02:16:50.648Z",
-  "before": 9994,
+  "startedAt": "2026-10-08T07:04:19.571Z",
+  "before": 0,
   "downloaded": 10460,
   "valid": 10460,
-  "inserted": 0,
+  "inserted": 9855,
   "existingSource": 0,
-  "duplicates": 10274,
-  "unmatchedProvince": 186,
+  "duplicates": 279,
+  "unmatchedProvince": 326,
   "invalid": 0,
   "classification": {
     "DI_TICH": "Di tích lịch sử - Văn hóa",
@@ -32,177 +32,178 @@
     "Way/relation coordinates are bounding-box centers, not exact entrances.",
     "Province assignment uses existing database boundaries; unmatched records are retained in staging only."
   ],
+  "updated": 0,
   "byProvince": [
     {
-      "ma_tinh": "101",
-      "ten_tinh": "Thành phố Hà Nội",
-      "source_records": 1150
+      "ma_tinh": "01",
+      "ten_tinh": "Hà Nội",
+      "source_records": 1152
     },
     {
-      "ma_tinh": "103",
-      "ten_tinh": "Thành phố Hải Phòng",
-      "source_records": 277
+      "ma_tinh": "04",
+      "ten_tinh": "Cao Bằng",
+      "source_records": 59
     },
     {
-      "ma_tinh": "109",
-      "ten_tinh": "Tỉnh Hưng Yên",
-      "source_records": 115
+      "ma_tinh": "08",
+      "ten_tinh": "Tuyên Quang",
+      "source_records": 149
     },
     {
-      "ma_tinh": "117",
-      "ten_tinh": "Tỉnh Ninh Bình",
-      "source_records": 314
+      "ma_tinh": "11",
+      "ten_tinh": "Điện Biên",
+      "source_records": 34
     },
     {
-      "ma_tinh": "203",
-      "ten_tinh": "Tỉnh Cao Bằng",
-      "source_records": 61
+      "ma_tinh": "12",
+      "ten_tinh": "Lai Châu",
+      "source_records": 67
     },
     {
-      "ma_tinh": "205",
-      "ten_tinh": "Tỉnh Lào Cai",
+      "ma_tinh": "14",
+      "ten_tinh": "Sơn La",
+      "source_records": 27
+    },
+    {
+      "ma_tinh": "15",
+      "ten_tinh": "Lào Cai",
       "source_records": 99
     },
     {
-      "ma_tinh": "209",
-      "ten_tinh": "Tỉnh Lạng Sơn",
-      "source_records": 40
-    },
-    {
-      "ma_tinh": "211",
-      "ten_tinh": "Tỉnh Tuyên Quang",
-      "source_records": 154
-    },
-    {
-      "ma_tinh": "215",
-      "ten_tinh": "Tỉnh Thái Nguyên",
-      "source_records": 53
-    },
-    {
-      "ma_tinh": "217",
-      "ten_tinh": "Tỉnh Phú Thọ",
-      "source_records": 183
-    },
-    {
-      "ma_tinh": "223",
-      "ten_tinh": "Tỉnh Bắc Ninh",
-      "source_records": 308
-    },
-    {
-      "ma_tinh": "225",
-      "ten_tinh": "Tỉnh Quảng Ninh",
-      "source_records": 135
-    },
-    {
-      "ma_tinh": "301",
-      "ten_tinh": "Tỉnh Điện Biên",
-      "source_records": 33
-    },
-    {
-      "ma_tinh": "302",
-      "ten_tinh": "Tỉnh Lai Châu",
-      "source_records": 65
-    },
-    {
-      "ma_tinh": "303",
-      "ten_tinh": "Tỉnh Sơn La",
-      "source_records": 26
-    },
-    {
-      "ma_tinh": "401",
-      "ten_tinh": "Tỉnh Thanh Hóa",
-      "source_records": 68
-    },
-    {
-      "ma_tinh": "403",
-      "ten_tinh": "Tỉnh Nghệ An",
-      "source_records": 79
-    },
-    {
-      "ma_tinh": "405",
-      "ten_tinh": "Tỉnh Hà Tĩnh",
+      "ma_tinh": "19",
+      "ten_tinh": "Thái Nguyên",
       "source_records": 52
     },
     {
-      "ma_tinh": "409",
-      "ten_tinh": "Tỉnh Quảng Trị",
-      "source_records": 208
+      "ma_tinh": "20",
+      "ten_tinh": "Lạng Sơn",
+      "source_records": 36
     },
     {
-      "ma_tinh": "411",
-      "ten_tinh": "Thành phố Huế",
+      "ma_tinh": "22",
+      "ten_tinh": "Quảng Ninh",
+      "source_records": 127
+    },
+    {
+      "ma_tinh": "24",
+      "ten_tinh": "Bắc Ninh",
+      "source_records": 307
+    },
+    {
+      "ma_tinh": "25",
+      "ten_tinh": "Phú Thọ",
+      "source_records": 182
+    },
+    {
+      "ma_tinh": "31",
+      "ten_tinh": "Hải Phòng",
+      "source_records": 278
+    },
+    {
+      "ma_tinh": "33",
+      "ten_tinh": "Hưng Yên",
+      "source_records": 115
+    },
+    {
+      "ma_tinh": "37",
+      "ten_tinh": "Ninh Bình",
+      "source_records": 314
+    },
+    {
+      "ma_tinh": "38",
+      "ten_tinh": "Thanh Hoá",
+      "source_records": 69
+    },
+    {
+      "ma_tinh": "40",
+      "ten_tinh": "Nghệ An",
+      "source_records": 77
+    },
+    {
+      "ma_tinh": "42",
+      "ten_tinh": "Hà Tĩnh",
+      "source_records": 51
+    },
+    {
+      "ma_tinh": "44",
+      "ten_tinh": "Quảng Trị",
+      "source_records": 199
+    },
+    {
+      "ma_tinh": "46",
+      "ten_tinh": "Huế",
       "source_records": 420
     },
     {
-      "ma_tinh": "501",
-      "ten_tinh": "Thành phố Đà Nẵng",
-      "source_records": 410
+      "ma_tinh": "48",
+      "ten_tinh": "Đà Nẵng",
+      "source_records": 401
     },
     {
-      "ma_tinh": "505",
-      "ten_tinh": "Tỉnh Quảng Ngãi",
-      "source_records": 124
+      "ma_tinh": "51",
+      "ten_tinh": "Quảng Ngãi",
+      "source_records": 122
     },
     {
-      "ma_tinh": "511",
-      "ten_tinh": "Tỉnh Khánh Hòa",
-      "source_records": 386
+      "ma_tinh": "52",
+      "ten_tinh": "Gia Lai",
+      "source_records": 213
     },
     {
-      "ma_tinh": "603",
-      "ten_tinh": "Tỉnh Gia Lai",
-      "source_records": 227
+      "ma_tinh": "56",
+      "ten_tinh": "Khánh Hoà",
+      "source_records": 349
     },
     {
-      "ma_tinh": "605",
-      "ten_tinh": "Tỉnh Đắk Lắk",
-      "source_records": 235
+      "ma_tinh": "66",
+      "ten_tinh": "Đắk Lắk",
+      "source_records": 224
     },
     {
-      "ma_tinh": "701",
-      "ten_tinh": "Thành phố Hồ Chí Minh",
-      "source_records": 2180
+      "ma_tinh": "68",
+      "ten_tinh": "Lâm Đồng",
+      "source_records": 593
     },
     {
-      "ma_tinh": "703",
-      "ten_tinh": "Tỉnh Lâm Đồng",
-      "source_records": 603
+      "ma_tinh": "75",
+      "ten_tinh": "Đồng Nai",
+      "source_records": 523
     },
     {
-      "ma_tinh": "709",
-      "ten_tinh": "Tỉnh Tây Ninh",
+      "ma_tinh": "79",
+      "ten_tinh": "Hồ Chí Minh",
+      "source_records": 2160
+    },
+    {
+      "ma_tinh": "80",
+      "ten_tinh": "Tây Ninh",
       "source_records": 370
     },
     {
-      "ma_tinh": "713",
-      "ten_tinh": "Tỉnh Đồng Nai",
-      "source_records": 527
+      "ma_tinh": "82",
+      "ten_tinh": "Đồng Tháp",
+      "source_records": 185
     },
     {
-      "ma_tinh": "803",
-      "ten_tinh": "Tỉnh Đồng Tháp",
-      "source_records": 186
+      "ma_tinh": "86",
+      "ten_tinh": "Vĩnh Long",
+      "source_records": 188
     },
     {
-      "ma_tinh": "805",
-      "ten_tinh": "Tỉnh An Giang",
-      "source_records": 646
+      "ma_tinh": "91",
+      "ten_tinh": "An Giang",
+      "source_records": 650
     },
     {
-      "ma_tinh": "809",
-      "ten_tinh": "Tỉnh Vĩnh Long",
-      "source_records": 189
+      "ma_tinh": "92",
+      "ten_tinh": "Cần Thơ",
+      "source_records": 282
     },
     {
-      "ma_tinh": "815",
-      "ten_tinh": "Thành phố Cần Thơ",
-      "source_records": 288
-    },
-    {
-      "ma_tinh": "823",
-      "ten_tinh": "Tỉnh Cà Mau",
-      "source_records": 63
+      "ma_tinh": "96",
+      "ten_tinh": "Cà Mau",
+      "source_records": 60
     }
   ],
-  "finishedAt": "2026-10-08T02:16:56.625Z"
+  "finishedAt": "2026-10-08T07:04:19.952Z"
 }

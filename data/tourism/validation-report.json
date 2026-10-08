@@ -1,5 +1,5 @@
 {
-  "mode": "apply",
+  "mode": "validate-rollback",
   "source": {
     "source": "OpenStreetMap contributors",
     "license": "ODbL 1.0",
@@ -10,7 +10,7 @@
     "count": 10460,
     "query": "[out:json][timeout:180];\narea[\"ISO3166-1\"=\"VN\"][\"admin_level\"=\"2\"]->.vn;\n(\n nwr(area.vn)[\"name\"][\"historic\"~\"^(archaeological_site|battlefield|castle|fort|manor|memorial|monument|ruins|city_gate|temple|tomb|building|heritage)$\"];\n nwr(area.vn)[\"name\"][\"tourism\"~\"^(attraction|viewpoint|museum|theme_park|zoo|aquarium|gallery)$\"];\n nwr(area.vn)[\"name\"][\"amenity\"=\"place_of_worship\"];\n nwr(area.vn)[\"name\"][\"natural\"~\"^(peak|cave_entrance|beach)$\"];\n nwr(area.vn)[\"name\"][\"waterway\"=\"waterfall\"];\n nwr(area.vn)[\"name\"][\"leisure\"~\"^(resort|nature_reserve)$\"];\n nwr(area.vn)[\"name\"][\"boundary\"=\"national_park\"];\n);\nout center tags;"
   },
-  "startedAt": "2026-10-08T07:12:14.931Z",
+  "startedAt": "2026-10-08T07:09:26.593Z",
   "before": 0,
   "downloaded": 10460,
   "valid": 10460,
@@ -405,5 +405,16 @@
       "count": 59
     }
   ],
-  "finishedAt": "2026-10-08T07:12:24.691Z"
+  "repeatImportAddsZero": true,
+  "api": {
+    "ranhgioi": {
+      "features": 34,
+      "bytes": 2029770
+    },
+    "diemdulich": {
+      "features": 9855,
+      "bytes": 3971828
+    }
+  },
+  "finishedAt": "2026-10-08T07:09:37.312Z"
 }

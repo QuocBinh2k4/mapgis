@@ -8,10 +8,10 @@ Dữ liệu được tải từ OpenStreetMap contributors qua Overpass API. Gi�
 - Đây là dữ liệu cộng đồng, không phải danh mục toàn bộ điểm du lịch hoặc hồ sơ xếp hạng di tích chính thức. Việc phân loại tự động cần kiểm duyệt; không phải mọi nơi thờ tự hoặc đỉnh núi đều phục vụ du lịch.
 - Ưu tiên `name:vi`, sau đó `name`. Chỉ nhập điểm có tên và tọa độ hợp lệ.
 - Tọa độ node là tọa độ gốc; way/relation dùng tâm hộp bao, có thể không trùng cổng vào. Phương pháp nằm trong `thong_tin_nguon.coordinate_method`.
-- Mã tỉnh lấy bằng kiểm tra điểm nằm trong ranh giới PostgreSQL đang có, không dùng tên tỉnh cũ từ OSM. Không sửa bộ ranh giới hiện tại.
+- Mã tỉnh lấy bằng kiểm tra điểm nằm trong ranh giới PostgreSQL, không dùng tên tỉnh cũ từ OSM. Nhập ranh giới trước theo [hướng dẫn chung](../../README.md).
 - Điểm không nằm trong ranh giới được giữ tại bảng `du_lieu_du_lich_osm` với trạng thái `unmatched_province`, đồng thời xuất ra `unmatched-provinces.json`; không đoán tỉnh để nhập vào bảng chính.
 - Các đối tượng cùng tên chuẩn hóa, cùng tỉnh và cách nhau tối đa 250 m được xem là có khả năng trùng. Ưu tiên relation, way, node; lưu mọi mã nguồn trong bảng nguồn để xem lại. Quy tắc này có thể gộp hai điểm khác nhau rất gần nhau.
-- Hai điểm có sẵn và các trường của chúng được giữ nguyên. Các mã nguồn đã nhập được bỏ qua khi chạy lại; không tự ghi đè thông tin đã chỉnh sửa và không tự xóa điểm vắng trong lần tải sau.
+- Mã nguồn đã nhập được giữ nguyên khi chạy `data:import`; dùng `data:refresh` để chủ động ghi đè các trường điểm OSM theo nguồn mới. Không tự xóa điểm vắng trong lần tải sau.
 
 ## Các bảng lưu dữ liệu
 
@@ -30,7 +30,7 @@ npm run data:import
 npm run data:verify
 ```
 
-Kết nối mặc định sử dụng cấu hình có sẵn trong `server.js` mà không sao chép mật khẩu. Có thể thay bằng biến môi trường `DATABASE_URL` hoặc các biến PostgreSQL `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `PGPORT`. Có thể chọn endpoint khác bằng `OVERPASS_URL`.
+Web và script dùng chung `DATABASE_URL` trong môi trường hoặc `.env`, hoặc các biến PostgreSQL `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `PGPORT`. Có thể chọn endpoint khác bằng `OVERPASS_URL`.
 
 `data:preview` chỉ dùng bảng tạm trong transaction và rollback, không sửa dữ liệu chính. `data:import` sao lưu các bản ghi hiện tại sang `backup-before-import-*.json`, nhập trong một transaction, kiểm tra khóa ngoại/tọa độ trước khi commit. Các bản sao lưu này chứa dữ liệu của bảng điểm đến và danh mục, không thay thế bản sao lưu đầy đủ PostgreSQL.
 
@@ -48,7 +48,7 @@ ORDER BY p.ten_tinh, l.ten_loai;
 
 SELECT ten_dia_diem, dia_chi, nguon_url, ST_X(geom) AS kinh_do, ST_Y(geom) AS vi_do
 FROM diem_du_lich
-WHERE ma_tinh = '101'; -- Mã tỉnh Hà Nội trong cơ sở dữ liệu hiện tại
+WHERE ma_tinh = '01'; -- Mã tỉnh Hà Nội trong bộ ranh giới mới
 
 SELECT osm_key, du_lieu_goc->'tags'->>'name' AS ten, trang_thai
 FROM du_lieu_du_lich_osm

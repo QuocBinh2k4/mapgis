@@ -1,4 +1,9 @@
 node_modules/
+.env
+.env.*
+!.env.example
+data/boundaries/*.geojson
+data/boundaries/backup-*.json
 .tools/
 __pycache__/
 *.pyc

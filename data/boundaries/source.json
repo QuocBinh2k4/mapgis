@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/thanglequoc/vietnamese-provinces-database",
+  "commit": "8b78ba5118715e1fa81769286724db79346abf52",
+  "downloadedAt": "2026-10-08T07:02:59.740Z",
+  "boundarySnapshot": "geojson_11Mar2026 (nguồn ghi ngày tải 13/03/2026)",
+  "metadata": {
+    "DatasetVersion": "v5.2.0",
+    "LatestDecree": "388/NQ-UBTVQH16",
+    "GeneratedAt": "2026-09-20T13:13:17Z"
+  },
+  "source": "Bando.com.vn, phân phối lại qua vietnamese-provinces-database",
+  "licenseNote": "Nguồn GeoJSON yêu cầu tham khảo điều khoản Bando.com.vn; không mặc định áp dụng giấy phép của mã nguồn repository.",
+  "count": 34
+}

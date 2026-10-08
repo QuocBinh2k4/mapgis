@@ -1,20 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
-
-function createClient() {
-    if (process.env.DATABASE_URL) return new Client({ connectionString: process.env.DATABASE_URL });
-    if (process.env.PGHOST || process.env.PGDATABASE) return new Client();
-    // Tương thích cấu hình dự án hiện tại; không sao chép mật khẩu sang tập tin khác.
-    const source = fs.readFileSync(path.join(__dirname, '..', 'server.js'), 'utf8');
-    const block = source.match(/new Pool\(\{([\s\S]*?)\}\)/)?.[1];
-    if (!block) throw new Error('Set DATABASE_URL or PGHOST/PGDATABASE to connect.');
-    const config = {};
-    for (const key of ['user', 'host', 'database', 'password']) {
-        const value = block.match(new RegExp(`${key}:\\s*(['"])(.*?)\\1`))?.[2];
-        if (value !== undefined) config[key] = value;
-    }
-    config.port = Number(block.match(/port:\s*(\d+)/)?.[1] || 5432);
-    return new Client(config);
+const envFile = path.join(__dirname, '..', '.env');
+if (fs.existsSync(envFile)) process.loadEnvFile(envFile);
+function databaseConfig() {
+    if (!process.env.DATABASE_URL && !process.env.PGHOST) throw new Error('Thi?u DATABASE_URL. ?i?n k?t n?i Neon v?o .env theo .env.example.');
+    return { ...(process.env.DATABASE_URL ? { connectionString: process.env.DATABASE_URL } : {}), connectionTimeoutMillis: 15000, max: 5 };
 }
-module.exports = { createClient };
+function createClient() { return new Client(databaseConfig()); }
+module.exports = { createClient, databaseConfig };

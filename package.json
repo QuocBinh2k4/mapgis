@@ -5,14 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "db:init": "node scripts/schema.js",
+    "boundaries:download": "node scripts/download-boundaries.js",
+    "boundaries:preview": "node scripts/import-boundaries.js",
+    "boundaries:import": "node scripts/import-boundaries.js --apply",
     "roads:download": "node scripts/download-roads.js",
     "roads:import": "python scripts/import-roads.py",
     "roads:test": "python scripts/test-road-profiles.py && node --test tests/routing.test.js",
     "data:download": "node scripts/download-tourism.js",
-    "data:preview": "node scripts/import-tourism.js",
+    "data:preview": "node scripts/import-tourism.js --with-boundaries",
     "data:import": "node scripts/import-tourism.js --apply",
     "data:verify": "node scripts/verify-tourism.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "data:refresh": "node scripts/import-tourism.js --apply --refresh",
+    "data:validate": "node scripts/import-tourism.js --validate",
+    "data:test": "node --test tests/tourism.test.js"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +31,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

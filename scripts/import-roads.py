@@ -18,14 +18,16 @@ DIRECTORY = ROOT / 'data' / 'roads'
 PBF = DIRECTORY / 'vietnam.osm.pbf'
 
 def connection():
+    env_file = ROOT / '.env'
+    if env_file.exists():
+        for line in env_file.read_text(encoding='utf-8-sig').splitlines():
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line: continue
+            key, value = line.split('=', 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('\"\''))
     if os.environ.get('DATABASE_URL'): return psycopg.connect(os.environ['DATABASE_URL'])
     if os.environ.get('PGHOST') or os.environ.get('PGDATABASE'): return psycopg.connect('')
-    source = (ROOT / 'server.js').read_text(encoding='utf-8-sig')
-    block = re.search(r'new Pool\(\{([\s\S]*?)\}\)', source).group(1)
-    config = {key: re.search(key + r"\s*:\s*['\"](.*?)['\"]", block).group(1) for key in ('user', 'host', 'database', 'password')}
-    config['dbname'] = config.pop('database')
-    config['port'] = int(re.search(r'port:\s*(\d+)', block).group(1))
-    return psycopg.connect(**config)
+    raise RuntimeError('Thiếu DATABASE_URL trong biến môi trường hoặc .env')
 
 class Scan(osmium.SimpleHandler):
     def __init__(self):
