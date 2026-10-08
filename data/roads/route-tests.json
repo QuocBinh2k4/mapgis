@@ -1,0 +1,127 @@
+{
+  "testedAt": "2026-10-08T08:36:02.403Z",
+  "status": "PASS",
+  "checks": [
+    "ready dataset",
+    "invalid input rejected",
+    "4 real vehicle routes",
+    "unique alternatives",
+    "valid geometry",
+    "off-network origin rejected",
+    "server files not public"
+  ],
+  "results": [
+    {
+      "mode": "car",
+      "destination": "Đền Ngọc Sơn",
+      "elapsedMs": 1880,
+      "routes": [
+        {
+          "meters": 3007,
+          "seconds": 560,
+          "points": 136
+        }
+      ],
+      "snaps": {
+        "start": {
+          "coordinates": [
+            105.841489,
+            21.025495
+          ],
+          "gapMeters": 30
+        },
+        "end": {
+          "coordinates": [
+            105.85251,
+            21.031713
+          ],
+          "gapMeters": 110
+        }
+      }
+    },
+    {
+      "mode": "motorcycle",
+      "destination": "Đền Ngọc Sơn",
+      "elapsedMs": 717,
+      "routes": [
+        {
+          "meters": 3007,
+          "seconds": 563,
+          "points": 136
+        }
+      ],
+      "snaps": {
+        "start": {
+          "coordinates": [
+            105.841489,
+            21.025495
+          ],
+          "gapMeters": 30
+        },
+        "end": {
+          "coordinates": [
+            105.85251,
+            21.031713
+          ],
+          "gapMeters": 110
+        }
+      }
+    },
+    {
+      "mode": "bicycle",
+      "destination": "Đền Ngọc Sơn",
+      "elapsedMs": 662,
+      "routes": [
+        {
+          "meters": 2734,
+          "seconds": 575,
+          "points": 92
+        }
+      ],
+      "snaps": {
+        "start": {
+          "coordinates": [
+            105.841489,
+            21.025495
+          ],
+          "gapMeters": 30
+        },
+        "end": {
+          "coordinates": [
+            105.85251,
+            21.031713
+          ],
+          "gapMeters": 110
+        }
+      }
+    },
+    {
+      "mode": "foot",
+      "destination": "Đền Ngọc Sơn",
+      "elapsedMs": 836,
+      "routes": [
+        {
+          "meters": 1794,
+          "seconds": 1322,
+          "points": 117
+        }
+      ],
+      "snaps": {
+        "start": {
+          "coordinates": [
+            105.841438,
+            21.025496
+          ],
+          "gapMeters": 25
+        },
+        "end": {
+          "coordinates": [
+            105.852561,
+            21.03079
+          ],
+          "gapMeters": 20
+        }
+      }
+    }
+  ]
+}

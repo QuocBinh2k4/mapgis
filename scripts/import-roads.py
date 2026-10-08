@@ -1,5 +1,6 @@
 import collections
 import datetime
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -11,6 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / '.tools' / 'roads-python'))
 import osmium
 import psycopg
+import certifi
 from psycopg.types.json import Jsonb
 from road_profiles import MODES, ROAD_TYPES, profile, barrier_access, restriction_modes
 
@@ -25,8 +27,14 @@ def connection():
             if not line or line.startswith('#') or '=' not in line: continue
             key, value = line.split('=', 1)
             os.environ.setdefault(key.strip(), value.strip().strip('\"\''))
-    if os.environ.get('DATABASE_URL'): return psycopg.connect(os.environ['DATABASE_URL'])
-    if os.environ.get('PGHOST') or os.environ.get('PGDATABASE'): return psycopg.connect('')
+    if os.environ.get('DATABASE_URL') or os.environ.get('PGHOST') or os.environ.get('PGDATABASE'):
+        dsn = os.environ.get('DATABASE_URL', '')
+        options = psycopg.conninfo.conninfo_to_dict(dsn)
+        ssl_mode = options.get('sslmode', os.environ.get('PGSSLMODE'))
+        roots = {}
+        if ssl_mode in {'verify-full', 'verify-ca'} and not options.get('sslrootcert') and not os.environ.get('PGSSLROOTCERT'):
+            roots['sslrootcert'] = certifi.where()
+        return psycopg.connect(dsn, connect_timeout=20, **roots)
     raise RuntimeError('Thiếu DATABASE_URL trong biến môi trường hoặc .env')
 
 class Scan(osmium.SimpleHandler):
@@ -102,6 +110,17 @@ def main():
     if not PBF.exists(): raise RuntimeError('Run node scripts/download-roads.js first')
     started = time.time()
     source = json.loads((DIRECTORY / 'source.json').read_text())
+    if source.get('md5'):
+        with PBF.open('rb') as source_file:
+            if hashlib.file_digest(source_file, 'md5').hexdigest() != source['md5']:
+                raise RuntimeError('Road source checksum mismatch; run roads:download again')
+    with connection() as conn:
+        storage_limit = conn.execute("SELECT pg_size_bytes(current_setting('neon.max_cluster_size',true))").fetchone()[0]
+        if storage_limit and source.get('bytes', 0) * 8 > storage_limit and '--ignore-size-check' not in sys.argv:
+            raise RuntimeError('Neon storage limit is too small for the nationwide road graph and indexes. Use ROUTING_PROVIDER=valhalla, or a larger PostgreSQL database. Pass --ignore-size-check only after verifying available storage.')
+        conn.execute('CREATE EXTENSION IF NOT EXISTS postgis')
+        conn.execute('CREATE EXTENSION IF NOT EXISTS pgrouting')
+        print(f"Database routing engine: {conn.execute('SELECT pgr_version()').fetchone()[0]}", flush=True)
     print('Pass 1: scanning intersections, access barriers and turn restrictions...', flush=True)
     scan = Scan()
     scan.apply_file(str(PBF), filters=[osmium.filter.KeyFilter('highway','barrier','access','motorcar','motorcycle','bicycle','foot','type')])

@@ -148,6 +148,11 @@ h1 span { color: var(--primary); }
 #route-step-list li { padding: 10px 4px; border-bottom: 1px solid var(--border); }
 #route-step-list strong { font-weight: 500; } #route-step-list span { display: block; color: var(--muted); margin-top: 5px; }
 .popup-directions { width: 100%; margin-top: 10px; }
+#route-start-help { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; margin: 7px 0; }
+.route-start-results { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.route-start-results button { display: block; width: 100%; border: 0; border-bottom: 1px solid var(--border); background: white; padding: 11px; text-align: left; color: var(--ink); font: inherit; font-size: 12px; line-height: 1.5; }
+.route-start-results button:last-child { border-bottom: 0; }
+.route-start-results button:hover, .route-start-results button:focus-visible { background: #eef7f2; }
 .picking-route-start, .picking-route-start .leaflet-interactive { cursor: crosshair !important; }
 @media (max-width: 1150px) { .map-legend { bottom: 130px; } .header-note { display: none; } }
 @media (max-width: 900px) { :root { --sidebar-width: 340px; } .site-header { padding: 0 22px; } .map-heading-detail { display: none; } .map-heading { padding: 0 10px; } .map-toolbar { left: 14px; gap: 8px; } #toggle-btn span { display: none; } .map-tip { left: 14px; padding: 12px; } .sidebar-header { padding: 26px 24px; } h1 { font-size: 31px; } }

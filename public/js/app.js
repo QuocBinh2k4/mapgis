@@ -221,7 +221,14 @@
     markerGroup = (L.markerClusterGroup
         ? L.markerClusterGroup({ showCoverageOnHover: false, animate: !reducedMotion.matches, maxClusterRadius: 55 })
         : L.featureGroup()).addTo(map);
-    if (window.createRoutingUI) routingUI = window.createRoutingUI(map, { showSidebar: setSidebar });
+    if (window.createRoutingUI) routingUI = window.createRoutingUI(map, {
+        showSidebar: setSidebar,
+        findOrigins(query) {
+            const term = normalize(query);
+            if (term.length < 2) return [];
+            return spots.filter(spot => normalize(`${spot.feature.properties.ten_dia_diem} ${spot.feature.properties.ten_tinh || ''}`).includes(term)).slice(0, 6).map(spot => spot.feature);
+        }
+    });
     map.attributionControl.addAttribution('Điểm đến &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>');
     L.control.zoom({ position: 'topright' }).addTo(map);
     L.control.layers({ 'Bản đồ đường phố': street, 'Ảnh vệ tinh': satellite, 'Bản đồ địa hình': terrain }, null, { position: 'bottomleft' }).addTo(map);
@@ -307,6 +314,9 @@
                     popup.append(directions);
                 }
                 marker.bindPopup(popup).bindTooltip(element('span', '', props.ten_dia_diem || 'Điểm du lịch'), { direction: 'top', offset: [0, -15] });
+                marker.on('click', event => {
+                    if (routingUI?.pickStart(event.latlng)) map.closePopup();
+                });
                 spots.push({ feature, marker });
             });
             loadState = 'ready';

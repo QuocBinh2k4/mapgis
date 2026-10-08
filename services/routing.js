@@ -145,9 +145,9 @@ async function route(pool,body,signal) {
         if(signal?.aborted)throw new RouteError('Đã hủy yêu cầu tìm đường.',499);
         await client.query('BEGIN');
         await client.query("SET LOCAL statement_timeout='35s'");
-        const available=(await client.query("SELECT to_regclass('routing.edges') AS table")).rows[0].table;
-        if(!available) throw new RouteError('Dữ liệu đường chưa được nhập vào máy chủ.',503);
-        const destination=(await client.query('SELECT id,ten_dia_diem,ST_X(geom) AS lng,ST_Y(geom) AS lat FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL',[destinationId])).rows[0];
+        const available=(await client.query("SELECT to_regclass('routing.edges') AS edges,to_regclass('routing.turns') AS turns,to_regclass('routing.imports') AS imports")).rows[0];
+        if(!available.edges || !available.turns || !available.imports) throw new RouteError('Dữ liệu đường chưa được nhập đầy đủ vào máy chủ.',503);
+        const destination=(await client.query('SELECT id,ten_dia_diem,ST_X(ST_Transform(geom,4326)) AS lng,ST_Y(ST_Transform(geom,4326)) AS lat FROM diem_du_lich WHERE id=$1 AND geom IS NOT NULL',[destinationId])).rows[0];
         if(!destination) throw new RouteError('Không tìm thấy điểm du lịch.',404);
         const end={lat:destination.lat,lng:destination.lng};
         const startSnap=await nearestEdge(client,start,mode,'Điểm xuất phát');
@@ -165,8 +165,16 @@ async function route(pool,body,signal) {
         let primary=await describePath(client,path,mode,[startSnap,endSnap]);
         // A route shorter than this candidate cannot leave its distance envelope.
         bounds=boundsFor(start,end,Math.max(1000,primary.distance+startSnap.gap+endSnap.gap));
-        const verified=await computePath(client,context,bounds);
-        if(verified!==null) primary=await describePath(client,verified,mode,[startSnap,endSnap]);
+        // Giữ tuyến đã tìm được nếu kiểm tra miền rộng hơn hết thời gian.
+        await client.query('SAVEPOINT verify_route');
+        let verified;
+        try { verified=await computePath(client,context,bounds); }
+        catch(error) {
+            await client.query('ROLLBACK TO SAVEPOINT verify_route');
+            if(error.code!=='57014' && error.status!==503) throw error;
+        }
+        await client.query('RELEASE SAVEPOINT verify_route');
+        if(verified!=null) primary=await describePath(client,verified,mode,[startSnap,endSnap]);
         const routes=[primary];
         const penalties=new Set(primary.edges);
         if(primary.distance>20) for(let attempt=0;attempt<3 && routes.length<3;attempt++) {
@@ -211,12 +219,16 @@ async function route(pool,body,signal) {
     }
 }
 function registerRouting(app,pool) {
+    const provider = process.env.ROUTING_PROVIDER || 'valhalla';
+    if (!['valhalla','pgrouting'].includes(provider)) throw new Error('ROUTING_PROVIDER phải là valhalla hoặc pgrouting.');
     let active=0;
     app.get('/api/routing/status',async(req,res)=>{
         try {
-            if(!(await pool.query("SELECT to_regclass('routing.imports') AS t")).rows[0].t) return res.json({ready:false});
+            if (provider === 'valhalla') return res.json({ready:true,provider,modes:[...MODES],source:'OpenStreetMap contributors / Valhalla (FOSSGIS)'});
+            const available=(await pool.query("SELECT to_regclass('routing.edges') AS edges,to_regclass('routing.turns') AS turns,to_regclass('routing.imports') AS imports")).rows[0];
+            if(!available.edges || !available.turns || !available.imports) return res.json({ready:false,modes:[...MODES],error:'Dữ liệu mạng đường chưa được nhập đầy đủ.'});
             const data=(await pool.query('SELECT imported_at,source,stats FROM routing.imports ORDER BY imported_at DESC LIMIT 1')).rows[0];
-            res.json({ready:!!data,modes:[...MODES],...data});
+            res.json({ready:!!data,provider,modes:[...MODES],...data});
         }catch(error){res.status(503).json({ready:false,error:'Chưa kết nối được dữ liệu đường.'});}
     });
     app.post('/api/routes',async(req,res)=>{
@@ -224,7 +236,11 @@ function registerRouting(app,pool) {
         active++;
         const controller=new AbortController();
         res.on('close',()=>{if(!res.writableEnded)controller.abort();});
-        try {const data=await route(pool,req.body,controller.signal);if(!controller.signal.aborted)res.json(data);}
+        try {
+            const data=provider==='pgrouting' ? await route(pool,req.body,controller.signal)
+                : await require('./valhalla').routeValhalla(pool,req.body,controller.signal,validateRequest);
+            if(!controller.signal.aborted)res.json(data);
+        }
         catch(error){if(!error.status)console.error('Routing error:',error.message);if(!controller.signal.aborted)res.status(error.status||500).json({error:error.status?error.message:'Không thể tính tuyến đường. Vui lòng thử lại.'});}
         finally{active--;}
     });

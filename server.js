@@ -10,6 +10,11 @@ const pool = new Pool(databaseConfig());
 app.locals.pool = pool;
 app.use(cors());
 app.use(express.json({ limit: '16kb' }));
+app.use((error, req, res, next) => {
+    if (error.type === 'entity.parse.failed') return res.status(400).json({ error: 'Nội dung yêu cầu JSON không hợp lệ.' });
+    if (error.type === 'entity.too.large') return res.status(413).json({ error: 'Nội dung yêu cầu quá lớn.' });
+    next(error);
+});
 registerRouting(app, pool);
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
@@ -33,8 +38,8 @@ app.get('/api/diemdulich', async (req, res) => {
         `);
         res.json(result.rows[0].geojson);
     } catch (error) {
-        console.error('L?i l?y ?i?m du l?ch:', error.message);
-        res.status(500).json({ error: 'Kh?ng l?y ???c ?i?m du l?ch t? c? s? d? li?u.' });
+        console.error('Lỗi lấy điểm du lịch:', error.message);
+        res.status(500).json({ error: 'Không lấy được điểm du lịch từ cơ sở dữ liệu.' });
     }
 });
 app.get('/api/ranhgioi', async (req, res) => {
@@ -50,12 +55,12 @@ app.get('/api/ranhgioi', async (req, res) => {
         `);
         res.json(result.rows[0].geojson);
     } catch (error) {
-        console.error('L?i l?y ranh gi?i:', error.message);
-        res.status(500).json({ error: 'Kh?ng l?y ???c ranh gi?i t?nh t? c? s? d? li?u.' });
+        console.error('Lỗi lấy ranh giới:', error.message);
+        res.status(500).json({ error: 'Không lấy được ranh giới tỉnh từ cơ sở dữ liệu.' });
     }
 });
 if (require.main === module) {
     const port = Number(process.env.PORT || 3000);
-    app.listen(port, () => console.log(`Server ?ang ch?y t?i http://localhost:${port}`));
+    app.listen(port, () => console.log(`Server đang chạy tại http://localhost:${port}`));
 }
 module.exports = app;

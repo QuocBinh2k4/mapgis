@@ -1,5 +1,18 @@
 # Mạng đường và tìm đường đến điểm du lịch
 
+## Cấu hình mặc định phù hợp Neon 1 GB
+
+Web mặc định dùng `ROUTING_PROVIDER=valhalla`: đọc điểm đến từ Neon, gửi tọa độ hai đầu đến Valhalla và nhận tuyến OpenStreetMap. Cấu hình này không cần nhập PBF vào database. Ô tô dùng `auto`, xe máy dùng `motor_scooter` với `exclude_highways`, xe đạp dùng `bicycle`, đi bộ dùng `pedestrian`. Tuyến đầu là tuyến đề xuất của provider; các tuyến thay thế không phải cam kết K tuyến ngắn nhất tuyệt đối. Adapter chuyển polyline6 về GeoJSON và kiểm tra tọa độ/độ lệch đầu tuyến trước khi trả về web.
+
+`VALHALLA_URL` mặc định: `https://valhalla1.openstreetmap.de/`. Đặt URL đến dịch vụ riêng nếu cần phục vụ nhiều người. Máy demo FOSSGIS áp dụng fair use, có thể không đáp ứng hoặc giới hạn lưu lượng; xem [hướng dẫn của nhà cung cấp](https://github.com/valhalla/valhalla#demo-server). `ROUTING_CLIENT_ID` dùng nhận diện website. Backend giới hạn một yêu cầu mỗi giây trên từng tiến trình, cache tối đa 100 kết quả trong 5 phút; triển khai nhiều instance cần giới hạn lưu lượng chung hoặc provider riêng.
+
+```powershell
+npm run roads:verify
+npm start
+```
+
+Các phần dưới mô tả backend tự tính `ROUTING_PROVIDER=pgrouting`, dùng khi PostgreSQL đủ dung lượng. Neon hiện tại có `neon.max_cluster_size = 1GB`, nên lần nhập toàn quốc bị hủy và không đưa bộ đường chưa hoàn tất vào sử dụng. Các bảng điểm du lịch được giữ nguyên.
+
 Nguồn: [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), bản trích Việt Nam của [Geofabrik](https://download.geofabrik.de/asia/vietnam.html), giấy phép ODbL 1.0. `source.json` ghi URL, ngày tải, ngày cập nhật và checksum MD5; `vietnam.osm.pbf` là dữ liệu gốc. Không lấy dữ liệu Google Maps.
 
 ## Dữ liệu PostgreSQL
@@ -43,15 +56,16 @@ Thời gian = tổng chiều dài / tốc độ ước tính theo loại đườ
 ## Chạy dự án / cập nhật dữ liệu
 
 ```powershell
-python -m pip install --target .tools/roads-python osmium psycopg[binary]
+python -m pip install --target .tools/roads-python osmium psycopg[binary] certifi
 npm run roads:download
 npm run roads:import
 npm run roads:test
+npm run roads:verify
 npm start
 ```
 
-Kết nối PostgreSQL dùng `DATABASE_URL` hoặc các biến `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `PGPORT`; nếu chưa đặt, script đọc cấu hình hiện có trong `server.js`. Máy PostgreSQL phải có PostGIS và pgRouting 4.x; importer bật extension pgRouting nếu đã cài bộ thư viện.
+Kết nối PostgreSQL dùng `DATABASE_URL` trong môi trường hoặc `.env`, hoặc các biến `PGHOST`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`, `PGPORT`. Đã kiểm tra tương thích pgRouting 3.8 trên Neon. Importer bật PostGIS/pgRouting, kiểm tra checksum của PBF trước khi dựng mạng đường. Với `sslmode=verify-full`, Python dùng chứng chỉ CA từ `certifi` nếu chưa đặt `PGSSLROOTCERT`/`sslrootcert`; không tắt kiểm tra SSL.
 
-Trên website: chọn điểm du lịch → **Chỉ đường đến đây** → chọn vị trí hiện tại, chạm bản đồ hoặc nhập vĩ độ/kinh độ → chọn phương tiện → **Tìm đường đi** → chọn thẻ tuyến. Các lựa chọn không bắt buộc phải đủ ba tuyến nếu dữ liệu không có tuyến phù hợp.
+Trên website: chọn điểm du lịch → **Chỉ đường đến đây** → chọn vị trí hiện tại, chạm bản đồ, nhập vĩ độ/kinh độ hoặc tìm tên điểm du lịch và chọn gợi ý → chọn phương tiện → **Tìm đường đi** → chọn thẻ tuyến. Tìm tên điểm xuất phát dùng các điểm du lịch đã tải trên web, không phải dịch vụ tìm mọi địa chỉ. Các lựa chọn không bắt buộc phải đủ ba tuyến nếu dữ liệu không có tuyến phù hợp.
 
 Thư mục `data`, `scripts` và cấu hình máy chủ nằm ngoài thư mục web công khai `public`.

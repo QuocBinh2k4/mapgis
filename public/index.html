@@ -62,8 +62,10 @@
                 <div class="route-panel-header"><button type="button" id="route-back" class="text-button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Điểm đến</button><button type="button" id="route-hide" class="text-button" aria-label="Ẩn bảng chỉ đường"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
                 <h2 id="route-title">Lên đường khám phá</h2>
                 <form id="route-form">
-                    <label for="route-start">Điểm xuất phát <small>(vĩ độ, kinh độ)</small></label>
-                    <input id="route-start" type="text" placeholder="Ví dụ: 21.0285, 105.8542" required autocomplete="off">
+                    <label for="route-start">Điểm xuất phát</label>
+                    <input id="route-start" type="text" placeholder="Tên điểm du lịch hoặc vĩ độ, kinh độ" required autocomplete="off" aria-describedby="route-start-help">
+                    <small id="route-start-help">Chọn điểm gợi ý, nhập tọa độ hoặc chọn trên bản đồ.</small>
+                    <div id="route-start-results" class="route-start-results" aria-label="Điểm xuất phát gợi ý" hidden></div>
                     <div class="route-start-actions"><button type="button" id="route-location"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Vị trí của tôi</button><button type="button" id="route-pick"><i class="fa-solid fa-map-pin" aria-hidden="true"></i> Chọn trên bản đồ</button></div>
                     <label for="route-destination">Điểm đến</label>
                     <input id="route-destination" type="text" readonly>
@@ -79,7 +81,7 @@
                 <div id="route-options" role="group" aria-label="Các tuyến đường đề xuất"></div>
                 <p id="route-connection-note" class="route-connection-note" hidden></p>
                 <details id="route-steps" hidden><summary>Các đoạn đường trên tuyến</summary><ol id="route-step-list"></ol></details>
-                <p class="route-disclaimer">Thời gian ước tính, chưa tính giao thông trực tiếp. Dữ liệu đường: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+                <p class="route-disclaimer">Thời gian ước tính, chưa tính giao thông trực tiếp. Xe máy tránh cao tốc. Dữ liệu: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>. Tính tuyến qua <a href="https://valhalla.openstreetmap.de/" target="_blank" rel="noopener">Valhalla</a>; tọa độ hai đầu được gửi đến dịch vụ tìm đường. <a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Báo lỗi bản đồ</a>.</p>
             </section>
             <section class="destinations" id="destinations" aria-labelledby="results-heading">
                 <div class="results-heading"><h2 id="results-heading">Điểm đến dành cho bạn</h2><span id="result-count" role="status" aria-live="polite">Đang tải…</span></div>
