@@ -10,12 +10,12 @@
     "count": 10460,
     "query": "[out:json][timeout:180];\narea[\"ISO3166-1\"=\"VN\"][\"admin_level\"=\"2\"]->.vn;\n(\n nwr(area.vn)[\"name\"][\"historic\"~\"^(archaeological_site|battlefield|castle|fort|manor|memorial|monument|ruins|city_gate|temple|tomb|building|heritage)$\"];\n nwr(area.vn)[\"name\"][\"tourism\"~\"^(attraction|viewpoint|museum|theme_park|zoo|aquarium|gallery)$\"];\n nwr(area.vn)[\"name\"][\"amenity\"=\"place_of_worship\"];\n nwr(area.vn)[\"name\"][\"natural\"~\"^(peak|cave_entrance|beach)$\"];\n nwr(area.vn)[\"name\"][\"waterway\"=\"waterfall\"];\n nwr(area.vn)[\"name\"][\"leisure\"~\"^(resort|nature_reserve)$\"];\n nwr(area.vn)[\"name\"][\"boundary\"=\"national_park\"];\n);\nout center tags;"
   },
-  "startedAt": "2026-10-08T02:14:18.139Z",
-  "before": 2,
+  "startedAt": "2026-10-08T04:08:30.976Z",
+  "before": 9994,
   "downloaded": 10460,
   "valid": 10460,
-  "inserted": 9992,
-  "existingSource": 0,
+  "inserted": 0,
+  "existingSource": 9992,
   "duplicates": 282,
   "unmatchedProvince": 186,
   "invalid": 0,
@@ -404,5 +404,5 @@
       "count": 62
     }
   ],
-  "finishedAt": "2026-10-08T02:14:59.447Z"
+  "finishedAt": "2026-10-08T04:08:40.357Z"
 }

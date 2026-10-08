@@ -11,13 +11,25 @@ app.use(cors());
 app.use(express.json({ limit: '16kb' }));
 
 // Kết nối PostgreSQL
+
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'GisDuLich',
+//     password: 'Quocbinhvt2004@',
+//     port: 5432,
+// }); 
+
+
+
+// Kết nối PostgreSQL sử dụng connection string từ Neon
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'GisDuLich',
-    password: 'Quocbinhvt2004@',
-    port: 5432,
+    connectionString: 'postgresql://neondb_owner:npg_nfi7HER5brqO@ep-flat-frost-b31vurre-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require',
+    ssl: {
+        rejectUnauthorized: false // Đảm bảo kết nối thành công với SSL trên Neon
+    }
 });
+
 
 registerRouting(app, pool);
 
