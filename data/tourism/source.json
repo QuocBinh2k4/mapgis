@@ -1,0 +1,10 @@
+{
+  "source": "OpenStreetMap contributors",
+  "license": "ODbL 1.0",
+  "licenseUrl": "https://www.openstreetmap.org/copyright",
+  "endpoint": "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "downloadedAt": "2026-10-08T02:10:32.931Z",
+  "osmTimestamp": "2026-10-08T02:07:27Z",
+  "count": 10460,
+  "query": "[out:json][timeout:180];\narea[\"ISO3166-1\"=\"VN\"][\"admin_level\"=\"2\"]->.vn;\n(\n nwr(area.vn)[\"name\"][\"historic\"~\"^(archaeological_site|battlefield|castle|fort|manor|memorial|monument|ruins|city_gate|temple|tomb|building|heritage)$\"];\n nwr(area.vn)[\"name\"][\"tourism\"~\"^(attraction|viewpoint|museum|theme_park|zoo|aquarium|gallery)$\"];\n nwr(area.vn)[\"name\"][\"amenity\"=\"place_of_worship\"];\n nwr(area.vn)[\"name\"][\"natural\"~\"^(peak|cave_entrance|beach)$\"];\n nwr(area.vn)[\"name\"][\"waterway\"=\"waterfall\"];\n nwr(area.vn)[\"name\"][\"leisure\"~\"^(resort|nature_reserve)$\"];\n nwr(area.vn)[\"name\"][\"boundary\"=\"national_park\"];\n);\nout center tags;"
+}

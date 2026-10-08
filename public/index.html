@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#087f70">
+    <meta name="description" content="Khám phá điểm du lịch Việt Nam trên bản đồ: di tích lịch sử, danh lam thắng cảnh và điểm đến tâm linh.">
+    <title>Việt Nam Ơi — Khám phá điểm đến</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <a class="skip-link" href="#searchInput">Đến phần tìm kiếm điểm đến</a>
+    <header class="site-header">
+        <a class="brand" href="./" aria-label="Việt Nam Ơi — Trang chủ">
+            <span class="brand-icon" aria-hidden="true"><i class="fa-solid fa-compass"></i></span>
+            <span><strong>Việt Nam Ơi<span class="brand-dot">.</span></strong><small>Mỗi điểm đến, một câu chuyện</small></span>
+        </a>
+        <nav aria-label="Điều hướng chính">
+            <a class="nav-link current" href="#map-container" aria-current="page">Khám phá bản đồ</a>
+            <a class="nav-link" href="#guide" id="guide-link">Cách khám phá</a>
+        </nav>
+        <span class="header-note"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Hành trình Việt Nam</span>
+    </header>
+    <main id="app-container">
+        <aside id="sidebar" aria-label="Tìm kiếm và lọc điểm du lịch">
+            <div class="sidebar-header">
+                <button type="button" class="sidebar-close" id="close-sidebar" aria-label="Đóng danh sách điểm đến"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                <span class="eyebrow"><span class="eyebrow-line"></span> ĐI & KHÁM PHÁ</span>
+                <h1>Việt Nam đẹp.<br><span>Đi để cảm nhận.</span></h1>
+                <p>Từ những miền di sản đến thiên nhiên kỳ vĩ. Tìm điểm đến cho hành trình tiếp theo của bạn.</p>
+                <div class="hero-decoration" aria-hidden="true"><i class="fa-solid fa-mountain-sun"></i></div>
+            </div>
+            <section class="explore-tools" id="explore-tools" aria-labelledby="search-heading">
+                <h2 id="search-heading">Bạn muốn đi đâu?</h2>
+                <form class="search-box" id="search-form" role="search">
+                    <label class="sr-only" for="searchInput">Tên điểm đến hoặc tỉnh, thành phố</label>
+                    <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+                    <input type="search" id="searchInput" placeholder="Tên điểm đến, tỉnh thành…" autocomplete="off" aria-controls="result-list">
+                    <button type="submit" id="searchBtn" aria-label="Tìm điểm đến"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </form>
+                <div class="filter-section">
+                    <h3>Khám phá theo sở thích</h3>
+                    <div class="filter-tags" role="group" aria-label="Loại hình du lịch">
+                        <button type="button" class="tag active" data-type="all" aria-pressed="true">Tất cả</button>
+                        <button type="button" class="tag" data-type="DI_TICH" aria-pressed="false"><i class="fa-solid fa-landmark" aria-hidden="true"></i> Di tích</button>
+                        <button type="button" class="tag" data-type="DANH_LAM" aria-pressed="false"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i> Thiên nhiên</button>
+                        <button type="button" class="tag" data-type="TAM_LINH" aria-pressed="false"><i class="fa-solid fa-vihara" aria-hidden="true"></i> Tâm linh</button>
+                        <button type="button" class="tag" data-type="KHU_DU_LICH" aria-pressed="false"><i class="fa-solid fa-umbrella-beach" aria-hidden="true"></i> Khu du lịch</button>
+                        <button type="button" class="tag" data-type="BAO_TANG" aria-pressed="false"><i class="fa-solid fa-building-columns" aria-hidden="true"></i> Bảo tàng</button>
+                    </div>
+                </div>
+                <div class="province-selection" id="province-selection" hidden>
+                    <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span id="selected-province"></span></span>
+                    <button type="button" id="clear-province" aria-label="Bỏ lọc tỉnh thành"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            </section>
+            <section class="route-panel" id="route-panel" aria-labelledby="route-title" hidden>
+                <div class="route-panel-header"><button type="button" id="route-back" class="text-button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Điểm đến</button><button type="button" id="route-hide" class="text-button" aria-label="Ẩn bảng chỉ đường"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+                <h2 id="route-title">Lên đường khám phá</h2>
+                <form id="route-form">
+                    <label for="route-start">Điểm xuất phát <small>(vĩ độ, kinh độ)</small></label>
+                    <input id="route-start" type="text" placeholder="Ví dụ: 21.0285, 105.8542" required autocomplete="off">
+                    <div class="route-start-actions"><button type="button" id="route-location"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> Vị trí của tôi</button><button type="button" id="route-pick"><i class="fa-solid fa-map-pin" aria-hidden="true"></i> Chọn trên bản đồ</button></div>
+                    <label for="route-destination">Điểm đến</label>
+                    <input id="route-destination" type="text" readonly>
+                    <fieldset class="route-modes"><legend>Bạn di chuyển bằng gì?</legend>
+                        <label><input type="radio" name="route-mode" value="car" checked><span><i class="fa-solid fa-car" aria-hidden="true"></i> Ô tô</span></label>
+                        <label><input type="radio" name="route-mode" value="motorcycle"><span><i class="fa-solid fa-motorcycle" aria-hidden="true"></i> Xe máy</span></label>
+                        <label><input type="radio" name="route-mode" value="bicycle"><span><i class="fa-solid fa-bicycle" aria-hidden="true"></i> Xe đạp</span></label>
+                        <label><input type="radio" name="route-mode" value="foot"><span><i class="fa-solid fa-person-walking" aria-hidden="true"></i> Đi bộ</span></label>
+                    </fieldset>
+                    <button type="submit" id="route-submit" class="primary-button"><i class="fa-solid fa-route" aria-hidden="true"></i> Tìm đường đi</button>
+                </form>
+                <p id="route-status" class="route-status" role="status" aria-live="polite">Chọn điểm xuất phát để tìm tuyến đường.</p>
+                <div id="route-options" role="group" aria-label="Các tuyến đường đề xuất"></div>
+                <p id="route-connection-note" class="route-connection-note" hidden></p>
+                <details id="route-steps" hidden><summary>Các đoạn đường trên tuyến</summary><ol id="route-step-list"></ol></details>
+                <p class="route-disclaimer">Thời gian ước tính, chưa tính giao thông trực tiếp. Dữ liệu đường: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.</p>
+            </section>
+            <section class="destinations" id="destinations" aria-labelledby="results-heading">
+                <div class="results-heading"><h2 id="results-heading">Điểm đến dành cho bạn</h2><span id="result-count" role="status" aria-live="polite">Đang tải…</span></div>
+                <div class="result-list" id="result-list" aria-busy="true">
+                    <div class="empty-state"><i class="fa-solid fa-compass" aria-hidden="true"></i><h3>Hành trình sắp bắt đầu</h3><p>Đang tìm các điểm đến trên bản đồ…</p></div>
+                </div>
+            </section>
+            <footer class="sidebar-footer"><i class="fa-regular fa-heart" aria-hidden="true"></i> Đi gần hay xa, đều là một trải nghiệm.</footer>
+        </aside>
+        <section id="map-container" aria-labelledby="map-heading">
+            <div class="map-toolbar">
+                <button type="button" id="toggle-btn" aria-controls="sidebar" aria-expanded="true" title="Ẩn danh sách điểm đến"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>Điểm đến</span></button>
+                <div class="map-heading"><span class="map-dot" aria-hidden="true"></span><h2 id="map-heading">Bản đồ khám phá</h2><span class="map-heading-detail">Việt Nam</span></div>
+            </div>
+            <div id="map" aria-label="Bản đồ các tỉnh thành và điểm du lịch Việt Nam"></div>
+            <button type="button" id="reset-map" title="Xem toàn bộ Việt Nam"><i class="fa-solid fa-expand" aria-hidden="true"></i><span>Toàn cảnh Việt Nam</span></button>
+            <div class="map-message" id="map-message" role="status" hidden></div>
+            <div class="map-tip"><span class="tip-icon"><i class="fa-regular fa-hand-pointer" aria-hidden="true"></i></span><div><strong>Một chạm, một điểm đến</strong><p>Chọn tỉnh thành để khám phá. Chọn dấu ghim để xem chi tiết.</p></div></div>
+            <div class="map-legend" aria-label="Chú giải bản đồ"><span><i class="legend-dot heritage"></i> Di tích</span><span><i class="legend-dot nature"></i> Thiên nhiên</span><span><i class="legend-dot spiritual"></i> Tâm linh</span><span><i class="legend-dot resort"></i> Khu du lịch</span><span><i class="legend-dot museum"></i> Bảo tàng</span></div>
+        </section>
+    </main>
+    <dialog id="guide" aria-labelledby="guide-title">
+        <div class="guide-header"><span class="eyebrow">BẮT ĐẦU HÀNH TRÌNH</span><button type="button" id="close-guide" aria-label="Đóng hướng dẫn"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+        <h2 id="guide-title">Khám phá theo cách của bạn</h2>
+        <ol><li><strong>Tìm nơi bạn muốn đến</strong><p>Nhập tên điểm du lịch hoặc tỉnh thành vào ô tìm kiếm.</p></li><li><strong>Chọn trải nghiệm yêu thích</strong><p>Lọc di tích, thiên nhiên hoặc tâm linh. Bạn cũng có thể chọn trực tiếp một tỉnh trên bản đồ.</p></li><li><strong>Xem điểm đến gần hơn</strong><p>Chọn một thẻ điểm đến hoặc dấu ghim để xem thông tin. Nhấn “Toàn cảnh Việt Nam” để quay về bản đồ tổng quan.</p></li></ol>
+        <button type="button" class="primary-button" id="start-exploring">Bắt đầu khám phá <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+    </dialog>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="js/routing.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

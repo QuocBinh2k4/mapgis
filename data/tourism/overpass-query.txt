@@ -1,0 +1,12 @@
+[out:json][timeout:180];
+area["ISO3166-1"="VN"]["admin_level"="2"]->.vn;
+(
+ nwr(area.vn)["name"]["historic"~"^(archaeological_site|battlefield|castle|fort|manor|memorial|monument|ruins|city_gate|temple|tomb|building|heritage)$"];
+ nwr(area.vn)["name"]["tourism"~"^(attraction|viewpoint|museum|theme_park|zoo|aquarium|gallery)$"];
+ nwr(area.vn)["name"]["amenity"="place_of_worship"];
+ nwr(area.vn)["name"]["natural"~"^(peak|cave_entrance|beach)$"];
+ nwr(area.vn)["name"]["waterway"="waterfall"];
+ nwr(area.vn)["name"]["leisure"~"^(resort|nature_reserve)$"];
+ nwr(area.vn)["name"]["boundary"="national_park"];
+);
+out center tags;

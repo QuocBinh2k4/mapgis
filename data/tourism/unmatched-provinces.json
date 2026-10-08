@@ -1,0 +1,1490 @@
+[
+  {
+    "key": "relation/10377306",
+    "name": "Bãi Vông",
+    "lat": 8.7222937,
+    "lon": 106.6411945,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/15981082",
+    "name": "Khu bảo tồn biển Cô Tô - Đảo Trần",
+    "lat": 21.1158409,
+    "lon": 107.8883745,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19000664",
+    "name": "Bãi biển Mỹ Khê",
+    "lat": 16.0756098,
+    "lon": 108.2547352,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19092525",
+    "name": "Khu bảo tồn biển tỉnh Cà Mau",
+    "lat": 8.847282,
+    "lon": 104.6591514,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19191948",
+    "name": "Bãi tắm công cộng Hòn Gai",
+    "lat": 20.9373608,
+    "lon": 107.1269167,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19465353",
+    "name": "Bãi Cháy",
+    "lat": 20.9446347,
+    "lon": 107.0424427,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19902807",
+    "name": "Nam Cat Resort",
+    "lat": 20.7558993,
+    "lon": 107.0574886,
+    "category": "KHU_DU_LICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/19916018",
+    "name": "Nhu Y's Beach",
+    "lat": 13.7204816,
+    "lon": 109.2179149,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/20057203",
+    "name": "Cai Beo",
+    "lat": 20.7375404,
+    "lon": 107.0621364,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/20122779",
+    "name": "花山国家级风景名胜区",
+    "lat": 22.4174855,
+    "lon": 107.1193406,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/20402110",
+    "name": "Xuan Dam beach",
+    "lat": 20.747037,
+    "lon": 106.9982797,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "relation/7128004",
+    "name": "Vườn quốc gia Xuân Thủy",
+    "lat": 20.2279052,
+    "lon": 106.5337157,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1014986358",
+    "name": "Chùa Linh Quang",
+    "lat": 10.5103812,
+    "lon": 108.9449426,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1015009537",
+    "name": "Nhà thờ Giáo xứ Phú Quý",
+    "lat": 10.524642,
+    "lon": 108.9334486,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1015158474",
+    "name": "Nhà thờ Tin lành Phú Quý",
+    "lat": 10.5074746,
+    "lon": 108.9505334,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1015158479",
+    "name": "Vạn An Thạnh",
+    "lat": 10.504761,
+    "lon": 108.9512479,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1015158482",
+    "name": "Chùa Liên Hoa",
+    "lat": 10.5052924,
+    "lon": 108.9520029,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1051792703",
+    "name": "Chùa Sinh Tồn Đông",
+    "lat": 9.9026608,
+    "lon": 114.5636742,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1182219451",
+    "name": "Khu bảo tồn biển Bạch Long Vĩ",
+    "lat": 20.1352807,
+    "lon": 107.7235517,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1195550420",
+    "name": "Storland beach",
+    "lat": 20.7215026,
+    "lon": 107.0583668,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1238122735",
+    "name": "Khu bảo tồn thiên nhiên Cù Lao Chàm",
+    "lat": 15.9372653,
+    "lon": 108.4790137,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1239290934",
+    "name": "Bãi Tắm Hòn Chồng",
+    "lat": 12.2748211,
+    "lon": 109.2033024,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1263685589",
+    "name": "Vinpearl Resort Nha Trang",
+    "lat": 12.2245427,
+    "lon": 109.2371103,
+    "category": "KHU_DU_LICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1263685591",
+    "name": "Marriott Resort & Spa, Hon Tre Island",
+    "lat": 12.2189425,
+    "lon": 109.2584058,
+    "category": "KHU_DU_LICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1265740821",
+    "name": "Bãi Cát Vàng",
+    "lat": 16.1426647,
+    "lon": 108.2315842,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1330726238",
+    "name": "Bãi biển Bắc",
+    "lat": 16.123965,
+    "lon": 108.3079479,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1375825874",
+    "name": "Khu bảo tồn thiên nhiên đất ngập nước Tiền Hải",
+    "lat": 20.3420096,
+    "lon": 106.6393824,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1383217347",
+    "name": "Bãi Cà Tiên",
+    "lat": 11.801391,
+    "lon": 109.1864439,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1383780581",
+    "name": "Khu bảo tồn thiên nhiên đất ngập nước Thái Thụy",
+    "lat": 20.5891316,
+    "lon": 106.6200587,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1415072215",
+    "name": "Bãi Sủng Cỏ",
+    "lat": 16.1903109,
+    "lon": 108.1559182,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1417740426",
+    "name": "Cửa khẩu Quốc tế Lệ Thanh",
+    "lat": 13.7681715,
+    "lon": 107.4982498,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1425961484",
+    "name": "Bãi Na",
+    "lat": 12.6407699,
+    "lon": 109.4353706,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1456837244",
+    "name": "Bãi biển Thiên Cầm",
+    "lat": 18.2766395,
+    "lon": 106.1019385,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1469438352",
+    "name": "Bãi biển Bình Minh",
+    "lat": 15.7785193,
+    "lon": 108.4309817,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1469438377",
+    "name": "Bai Bien Ha Binh",
+    "lat": 15.774766,
+    "lon": 108.4330581,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1469438378",
+    "name": "Bai Bien Tan An",
+    "lat": 15.7819819,
+    "lon": 108.4290452,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1489570686",
+    "name": "Bãi Trào",
+    "lat": 9.9622067,
+    "lon": 104.0121151,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1490517090",
+    "name": "Thuong Dong Co Hy",
+    "lat": 10.3791682,
+    "lon": 104.0740665,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1490517091",
+    "name": "DINH TRĂMQUAN",
+    "lat": 10.3790861,
+    "lon": 104.0741394,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1490517097",
+    "name": "DINH TRĂMQUAN",
+    "lat": 10.37925,
+    "lon": 104.0740834,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1491082316",
+    "name": "Dinh Cậu",
+    "lat": 10.2172172,
+    "lon": 103.9564177,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1493885005",
+    "name": "Bãi Rạch Vẹm",
+    "lat": 10.3692063,
+    "lon": 103.9345274,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/150859298",
+    "name": "Minh Chau Beach",
+    "lat": 20.9447579,
+    "lon": 107.5531163,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/150876064",
+    "name": "Bãi biển Sơn Hào",
+    "lat": 20.9006979,
+    "lon": 107.5249837,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/150876066",
+    "name": "Bãi biển Minh Châu",
+    "lat": 20.9172878,
+    "lon": 107.5411464,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/150876067",
+    "name": "Bãi biển Quan Lạn",
+    "lat": 20.8676061,
+    "lon": 107.5015612,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/152287771",
+    "name": "Bãi Sao",
+    "lat": 10.0529425,
+    "lon": 104.0374073,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/152288136",
+    "name": "Bãi Khem",
+    "lat": 10.0358209,
+    "lon": 104.0323797,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/153999648",
+    "name": "Thom Beach",
+    "lat": 10.4084537,
+    "lon": 104.0483351,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1545919861",
+    "name": "Bãi Chà Là",
+    "lat": 11.7889945,
+    "lon": 109.1877994,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1546195288",
+    "name": "Bãi Tràng",
+    "lat": 11.3555865,
+    "lon": 109.0066777,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/1563951273",
+    "name": "Bãi tắm",
+    "lat": 20.1896322,
+    "lon": 106.3807361,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/185937855",
+    "name": "Cat Chanh beach",
+    "lat": 13.9202083,
+    "lon": 109.2631642,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/207742943",
+    "name": "Nha Trang",
+    "lat": 12.2357927,
+    "lon": 109.2034698,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/220821647",
+    "name": "Bãi Trước",
+    "lat": 10.3438352,
+    "lon": 107.0738621,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/222906164",
+    "name": "Bãi Dứa",
+    "lat": 10.3275338,
+    "lon": 107.0801591,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/231779290",
+    "name": "Bãi Dài",
+    "lat": 12.0498559,
+    "lon": 109.2225985,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/233875809",
+    "name": "Bãi Ô Quắn",
+    "lat": 10.3258332,
+    "lon": 107.0877823,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/234800751",
+    "name": "Bãi Sau",
+    "lat": 10.3425716,
+    "lon": 107.0982282,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/235006078",
+    "name": "Bến Thạch Kiều",
+    "lat": 10.3385788,
+    "lon": 107.0712537,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/256675637",
+    "name": "Lăng Cô",
+    "lat": 16.2689456,
+    "lon": 108.0638889,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/259198642",
+    "name": "Bãi tắm Long Hải",
+    "lat": 10.3851268,
+    "lon": 107.2346207,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/286293879",
+    "name": "Cầu Đá cổ",
+    "lat": 10.3398691,
+    "lon": 107.0693793,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/32003768",
+    "name": "Bãi Vũng Bầu",
+    "lat": 10.3006721,
+    "lon": 103.877807,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/32003769",
+    "name": "Bãi Trường",
+    "lat": 10.138022,
+    "lon": 103.9736958,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/384652651",
+    "name": "Bãi Trà Cổ",
+    "lat": 21.4819148,
+    "lon": 108.0493226,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/404529508",
+    "name": "Bãi Gành Dầu",
+    "lat": 10.3760496,
+    "lon": 103.8556851,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/409741436",
+    "name": "Bãi biển Cát Cỏ 2",
+    "lat": 20.7193188,
+    "lon": 107.0554867,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/440611802",
+    "name": "Bãi trước Từ Nham",
+    "lat": 13.4586245,
+    "lon": 109.3198598,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/443199521",
+    "name": "Bai Dai Beach",
+    "lat": 10.2369771,
+    "lon": 103.9496607,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/451452487",
+    "name": "Cửa Cạn",
+    "lat": 10.2779853,
+    "lon": 103.9220486,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/451452488",
+    "name": "Bãi Dài",
+    "lat": 10.3344726,
+    "lon": 103.8489721,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/451452489",
+    "name": "Bãi Ông Lang",
+    "lat": 10.2573867,
+    "lon": 103.9367056,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/451772441",
+    "name": "Bãi Rạch Tràm",
+    "lat": 10.4292545,
+    "lon": 103.9715372,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/451772442",
+    "name": "Bãi Rạch Vẹm",
+    "lat": 10.3860206,
+    "lon": 103.9416611,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/478007377",
+    "name": "Bãi biển Sầm Sơn",
+    "lat": 19.7444124,
+    "lon": 105.9079805,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/481823401",
+    "name": "Quy Nhon Beach",
+    "lat": 13.7585339,
+    "lon": 109.2280468,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/498065942",
+    "name": "Hidden beach",
+    "lat": 20.8169588,
+    "lon": 107.4701044,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/597992122",
+    "name": "Chùa Trường Sa Lớn",
+    "lat": 8.6438933,
+    "lon": 111.9205366,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/610144920",
+    "name": "Chùa Song Tử Tây",
+    "lat": 11.4272635,
+    "lon": 114.3300211,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/614046079",
+    "name": "Chùa Nam Huyên",
+    "lat": 10.1794395,
+    "lon": 114.3672855,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/630377259",
+    "name": "Bãi biển Tiên Sa",
+    "lat": 16.1243611,
+    "lon": 108.2202733,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/690132854",
+    "name": "Bãi biển Tùng Thu",
+    "lat": 20.7303845,
+    "lon": 107.0394022,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/693082790",
+    "name": "Bãi biển Đồ Sơn",
+    "lat": 20.6864239,
+    "lon": 106.7958038,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/732283659",
+    "name": "Nhà thờ Trái Tim",
+    "lat": 20.1297546,
+    "lon": 106.3142787,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/736723391",
+    "name": "Phước Hải",
+    "lat": 10.4248811,
+    "lon": 107.3018689,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/75065375",
+    "name": "Bãi tắm Hàm Tiến",
+    "lat": 10.9454851,
+    "lon": 108.2316488,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/751858953",
+    "name": "Bãi Dương",
+    "lat": 8.675046,
+    "lon": 106.6613593,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/752991350",
+    "name": "Bãi Ông Cường",
+    "lat": 8.7464441,
+    "lon": 106.6345279,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/753491821",
+    "name": "Bãi Ông Cau",
+    "lat": 8.6877104,
+    "lon": 106.5669831,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/753491824",
+    "name": "Bãi Bàng",
+    "lat": 8.7218916,
+    "lon": 106.5931568,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/753496272",
+    "name": "Bãi biển Dốc Lết",
+    "lat": 12.5589902,
+    "lon": 109.2335509,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/753518096",
+    "name": "Bãi Cô Vân",
+    "lat": 8.6920704,
+    "lon": 106.7354145,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/753518100",
+    "name": "Bãi Hòn Cau",
+    "lat": 8.6867503,
+    "lon": 106.7378285,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/755508145",
+    "name": "Bãi Ông",
+    "lat": 15.9598354,
+    "lon": 108.4998797,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/775773134",
+    "name": "Ho Coc Beach resort",
+    "lat": 10.4994011,
+    "lon": 107.4769991,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/788324533",
+    "name": "Bãi Vọng Nguyệt",
+    "lat": 10.3223418,
+    "lon": 107.0847189,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/860296224",
+    "name": "Chùa Đục",
+    "lat": 15.3892037,
+    "lon": 109.1018629,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/862936695",
+    "name": "Khách sạn & Resort Đảo Ngọc Lý Sơn",
+    "lat": 15.3703439,
+    "lon": 109.1166893,
+    "category": "KHU_DU_LICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/863228732",
+    "name": "Lân Tân",
+    "lat": 15.3740946,
+    "lon": 109.1061237,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/863492143",
+    "name": "Chùa Giác Lâm",
+    "lat": 15.3820026,
+    "lon": 109.1231662,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/871576679",
+    "name": "Nhà thờ Hòn Tre",
+    "lat": 9.9746528,
+    "lon": 104.8553442,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "way/895756059",
+    "name": "Bãi Dâu",
+    "lat": 10.3685598,
+    "lon": 107.0615278,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/10133138818",
+    "name": "Plage de da nhai",
+    "lat": 17.655376,
+    "lon": 106.5188128,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/10223608917",
+    "name": "snorkeling spot",
+    "lat": 8.7321607,
+    "lon": 106.6186088,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/10758119407",
+    "name": "Pêcheurs",
+    "lat": 13.1866565,
+    "lon": 109.3010677,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/10793078957",
+    "name": "Điểm cơ sở A6",
+    "lat": 9.9740011,
+    "lon": 109.0838682,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/10821152105",
+    "name": "Hòn Đỉnh Hương",
+    "lat": 20.9004906,
+    "lon": 107.0159614,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11101215627",
+    "name": "Núi Hòn Tươi",
+    "lat": 15.3827994,
+    "lon": 109.1004403,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11425582714",
+    "name": "Sunset",
+    "lat": 10.9362359,
+    "lon": 108.1851218,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11443514141",
+    "name": "法卡山",
+    "lat": 21.9782637,
+    "lon": 106.8327257,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11596192864",
+    "name": "Núi Phu Xai Lai Leng",
+    "lat": 19.1978235,
+    "lon": 104.1816437,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11637285469",
+    "name": "Chùa Hang - Thiên Khổng Thạch Tự",
+    "lat": 15.3908508,
+    "lon": 109.1248439,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/11772348890",
+    "name": "Núi Hòn Vung",
+    "lat": 15.3736207,
+    "lon": 109.1176647,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/12071058849",
+    "name": "Ong Noé beach",
+    "lat": 8.7495847,
+    "lon": 106.6613525,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/12071094464",
+    "name": "Plage secrète",
+    "lat": 8.7034772,
+    "lon": 106.5787054,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/12071560380",
+    "name": "Ong toine beach",
+    "lat": 8.747411,
+    "lon": 106.6365132,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/12484110701",
+    "name": "Rock Hill",
+    "lat": 10.5447223,
+    "lon": 108.9266243,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/12818429487",
+    "name": "Biển vô cực",
+    "lat": 20.5531209,
+    "lon": 106.6006529,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13147488835",
+    "name": "Cột mốc chủ quyền đảo An Bang",
+    "lat": 7.8919522,
+    "lon": 112.9212567,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13255497664",
+    "name": "Bãi Lãng Du",
+    "lat": 10.3233013,
+    "lon": 107.0832969,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1336276437",
+    "name": "Núi Rào Cỏ",
+    "lat": 18.1577684,
+    "lon": 105.4126544,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1336349389",
+    "name": "Pa Lông",
+    "lat": 22.1227061,
+    "lon": 102.4122056,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13420414198",
+    "name": "Viewpoint Mũi Chim Chim",
+    "lat": 8.6915988,
+    "lon": 106.6518084,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13629822092",
+    "name": "Khu du lịch Quốc Tế Đồi Rồng - Đồ Sơn",
+    "lat": 20.6927218,
+    "lon": 106.7733853,
+    "category": "KHU_DU_LICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13633061400",
+    "name": "Đền thờ nữ tướng Lê Chân",
+    "lat": 20.6905808,
+    "lon": 106.7796789,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13633061401",
+    "name": "Đền Tứ phủ",
+    "lat": 20.6914934,
+    "lon": 106.7809964,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13657735001",
+    "name": "Sunrise viewpoint",
+    "lat": 10.9277093,
+    "lon": 108.2954457,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13707121732",
+    "name": "Chùa âm hồn",
+    "lat": 15.3775748,
+    "lon": 109.1377862,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/13904911222",
+    "name": "扣班山",
+    "lat": 21.7559869,
+    "lon": 107.1610959,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/14110347667",
+    "name": "三那山",
+    "lat": 21.6103609,
+    "lon": 107.3981538,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/14221140535",
+    "name": "Binh Tien Becn",
+    "lat": 11.8086555,
+    "lon": 109.186032,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1501606547",
+    "name": "波内山",
+    "lat": 21.7299324,
+    "lon": 107.1978307,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1501607160",
+    "name": "公母山 Núi Công Mẫu",
+    "lat": 21.8462508,
+    "lon": 107.004265,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1501607480",
+    "name": "馗下卡",
+    "lat": 21.9301864,
+    "lon": 107.047896,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/1552566836",
+    "name": "Sa Huỳnh",
+    "lat": 14.6659311,
+    "lon": 109.0795719,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/2124741117",
+    "name": "Ứ Tu Cò",
+    "lat": 22.709697,
+    "lon": 102.4376761,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/2645906877",
+    "name": "Bia chủ quyền Đảo Song Tử Tây",
+    "lat": 11.4294173,
+    "lon": 114.331434,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/2707025319",
+    "name": "Vịnh Hạ Long",
+    "lat": 20.9084384,
+    "lon": 107.0682782,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4259837989",
+    "name": "Gazebos",
+    "lat": 13.7449631,
+    "lon": 109.2145906,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4472600793",
+    "name": "Vịnh Vũng Rô",
+    "lat": 12.8712447,
+    "lon": 109.4143007,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4600449293",
+    "name": "Trai Tim",
+    "lat": 20.1300146,
+    "lon": 106.3143618,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4713142090",
+    "name": "Bai Tu Long Bay",
+    "lat": 20.9260645,
+    "lon": 107.2552099,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4730877540",
+    "name": "Cửa Vạn",
+    "lat": 20.8072422,
+    "lon": 107.1179445,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4730928606",
+    "name": "Hang Đầu Gỗ",
+    "lat": 20.9112131,
+    "lon": 107.0186598,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4753109965",
+    "name": "Hang Thiên Cảnh Sơn",
+    "lat": 20.8819256,
+    "lon": 107.1695662,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/4755942999",
+    "name": "Thay Cave",
+    "lat": 20.8682301,
+    "lon": 107.2011143,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5024041492",
+    "name": "百弍级顶",
+    "lat": 21.8555043,
+    "lon": 107.0133805,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5048543821",
+    "name": "Nhà Thờ Hòn Tre",
+    "lat": 9.9746888,
+    "lon": 104.8555434,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5202498021",
+    "name": "Chùa Phước Xa",
+    "lat": 13.8782256,
+    "lon": 109.295377,
+    "category": "TAM_LINH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5233871122",
+    "name": "Hang rái",
+    "lat": 11.6779898,
+    "lon": 109.1825017,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5316382623",
+    "name": "hòn gà chọi",
+    "lat": 20.8974878,
+    "lon": 107.0317965,
+    "category": "BAO_TANG",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5361071925",
+    "name": "Cau Dinh Vu - Cat Hai",
+    "lat": 20.8066726,
+    "lon": 106.8283051,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5482745524",
+    "name": "Bãi biển Bà Kèo",
+    "lat": 10.1948892,
+    "lon": 103.9637369,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/560066508",
+    "name": "Núi Pu Đen Đinh",
+    "lat": 22.1534158,
+    "lon": 102.3784111,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5736659006",
+    "name": "Bãi Suối Ồ - Sông Lô",
+    "lat": 10.5659429,
+    "lon": 107.5673747,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5788934070",
+    "name": "Tượng Trần Hưng Đạo",
+    "lat": 11.4288134,
+    "lon": 114.3323476,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5808893069",
+    "name": "Bia chủ quyền",
+    "lat": 10.1795616,
+    "lon": 114.3666203,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5808893070",
+    "name": "Tượng Trần Hưng Đạo",
+    "lat": 10.1790125,
+    "lon": 114.3661335,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5809817490",
+    "name": "Bia chủ quyền của VNCH năm 1956",
+    "lat": 10.1794389,
+    "lon": 114.3670495,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5918762286",
+    "name": "Sehr schöner strand",
+    "lat": 11.0188516,
+    "lon": 108.3577742,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5918784290",
+    "name": "Strand",
+    "lat": 11.0183038,
+    "lon": 108.3573104,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/5984618286",
+    "name": "Nhất Tự Sơn",
+    "lat": 13.4208073,
+    "lon": 109.2251028,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6274092945",
+    "name": "Du lịch Sinh thái Mỏ Ó",
+    "lat": 9.4383435,
+    "lon": 106.182567,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6304871408",
+    "name": "Hòn Cặp Ré",
+    "lat": 20.9485006,
+    "lon": 107.0941177,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6359615985",
+    "name": "Fausse plage starfish",
+    "lat": 10.3736782,
+    "lon": 103.9380437,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6361980940",
+    "name": "Photo Motifs",
+    "lat": 10.1525806,
+    "lon": 103.9732746,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6445886190",
+    "name": "Beache's Four",
+    "lat": 13.9294262,
+    "lon": 109.2486504,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6513385821",
+    "name": "Núi Khoang La San",
+    "lat": 22.4004841,
+    "lon": 102.1438643,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6513385826",
+    "name": "Hòn đá Trắng",
+    "lat": 22.6939875,
+    "lon": 102.425152,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6515153344",
+    "name": "Núi Mo Tho Cò",
+    "lat": 22.7626614,
+    "lon": 102.5280745,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6533337485",
+    "name": "Núi Pu Si Lung",
+    "lat": 22.6263556,
+    "lon": 102.7876761,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6586702673",
+    "name": "Bia chủ quyền đảo Sinh Tồn",
+    "lat": 9.8853856,
+    "lon": 114.3296179,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6722564185",
+    "name": "Bar view point",
+    "lat": 20.7382521,
+    "lon": 107.0328889,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/6968353589",
+    "name": "Bãi Trường Beach",
+    "lat": 10.1145835,
+    "lon": 103.9808803,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7005393785",
+    "name": "Snorkeling spot",
+    "lat": 10.2568503,
+    "lon": 103.9362179,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7040229623",
+    "name": "Thác Hoài Dương",
+    "lat": 8.7208039,
+    "lon": 106.5925312,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7040229642",
+    "name": "Bãi Ông Đụng",
+    "lat": 8.7065057,
+    "lon": 106.5904424,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7040433200",
+    "name": "Dolphin show",
+    "lat": 12.2189846,
+    "lon": 109.2394781,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7040442174",
+    "name": "Mộ Cô Vân",
+    "lat": 8.6920466,
+    "lon": 106.735674,
+    "category": "DI_TICH",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7113815237",
+    "name": "Bãi tắm Chí Linh",
+    "lat": 10.3682857,
+    "lon": 107.1201512,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7113815246",
+    "name": "Bãi tắm Thủy Tiên",
+    "lat": 10.3708476,
+    "lon": 107.1237856,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/7113815247",
+    "name": "Bãi tắm Long Cung",
+    "lat": 10.3726259,
+    "lon": 107.1264812,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/8025398912",
+    "name": "Núi Lìa Phía",
+    "lat": 23.3396887,
+    "lon": 105.2727848,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/8591412033",
+    "name": "Bãi Đầm Trầu",
+    "lat": 8.7343211,
+    "lon": 106.6235243,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  },
+  {
+    "key": "node/9946489226",
+    "name": "Bãi biển Nhật Lệ",
+    "lat": 17.491054,
+    "lon": 106.627149,
+    "category": "DANH_LAM",
+    "reason": "unmatched_province"
+  }
+]
