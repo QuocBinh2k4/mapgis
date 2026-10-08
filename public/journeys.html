@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lịch trình & bộ sưu tập — Việt Nam Ơi</title>
+    <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/accounts.css"><link rel="stylesheet" href="css/journeys.css">
+</head>
+<body class="journeys-page">
+    <header class="site-header"><a class="brand" href="/">Việt Nam Ơi.</a><nav aria-label="Điều hướng chính"><a class="nav-link" href="/">Bản đồ</a><a class="nav-link current" href="/journeys">Lịch trình & bộ sưu tập</a><a class="nav-link" id="auth-link" href="/account">Đăng nhập</a></nav></header>
+    <main class="journeys-main">
+        <div class="journeys-intro"><span class="eyebrow">HÀNH TRÌNH CỦA BẠN</span><h1>Lưu nơi mình thích.<br>Chuẩn bị chuyến đi.</h1><p>Bộ sưu tập và lịch trình được lưu cùng tài khoản để mở lại trên thiết bị khác.</p></div>
+        <p id="journey-status" role="status" aria-live="polite">Đang tải…</p>
+        <section id="journey-access" hidden><h2>Bắt đầu hành trình của bạn</h2><p>Đăng nhập để lưu bộ sưu tập và lịch trình.</p><a id="journey-login" class="primary-button" href="/account?return=%2Fjourneys">Đăng nhập bằng Google</a></section>
+        <div id="journey-workspace" class="journey-layout" hidden>
+            <aside class="journey-library" aria-label="Bộ sưu tập và lịch trình đã lưu">
+                <section class="journey-card"><h2>Bộ sưu tập</h2><label for="collection-view">Danh sách</label><select id="collection-view"><option value="want">Muốn đi</option><option value="visited">Đã đi</option><option value="all">Tìm mọi điểm đến</option></select><label for="place-search">Tìm điểm đến</label><input id="place-search" type="search" placeholder="Tên điểm đến, tỉnh thành…"><div id="collection-list"></div><button id="more-places" type="button" class="secondary-button" hidden>Xem thêm</button></section>
+                <section class="journey-card"><h2>Lịch trình đã lưu</h2><div class="journey-actions"><button id="new-journey" type="button" class="secondary-button">Tạo lịch trình</button><button id="reload-journeys" type="button" class="secondary-button">Tải lại</button></div><div id="journey-list"></div></section>
+                <section class="journey-card"><h2>Gợi ý cho chuyến đi</h2><p>Mẫu tham khảo, bạn có thể điều chỉnh điểm đến và số ngày.</p><button type="button" class="template-button" data-template="hagiang"><strong>3 ngày Hà Giang</strong><small>Quản Bạ · Đồng Văn · Mã Pí Lèng</small></button><button type="button" class="template-button" data-template="hoian"><strong>2 ngày Hội An</strong><small>Phố cổ · Chùa Cầu · Trà Quế</small></button><p class="muted">Ngày trong mẫu do ứng dụng sắp xếp, chưa tính thời gian di chuyển. Điểm chưa có trên bản đồ sẽ được thông báo khi chọn mẫu.</p><a href="https://www.vietnam.travel/things-to-do/ha-giang-loop" target="_blank" rel="noopener">Tham khảo điểm đến Hà Giang</a><br><a href="https://www.vietnam.travel/places-to-go/central-vietnam/hoi-an" target="_blank" rel="noopener">Tham khảo điểm đến Hội An</a></section>
+            </aside>
+            <section id="journey-editor" class="journey-card" aria-label="Soạn lịch trình">
+                <label for="journey-title">Tên lịch trình</label><input id="journey-title" maxlength="120" placeholder="Chuyến đi tiếp theo">
+                <div class="journey-actions"><button id="save-journey" type="button" class="primary-button">Lưu lịch trình</button><button id="add-day" type="button" class="secondary-button">Thêm ngày</button><button id="share-journey" type="button" class="secondary-button">Chia sẻ bằng link</button><button id="print-journey" type="button" class="secondary-button">Xuất PDF</button><button id="delete-journey" type="button" class="text-button danger-text" hidden>Xóa lịch trình</button></div>
+                <p id="save-state" role="status"></p><p class="editor-help">Kéo thả điểm vào vị trí mong muốn hoặc dùng nút ↑ ↓ và chọn ngày. Thêm điểm từ bộ sưu tập bên cạnh. Xuất PDF: chọn “Lưu dưới dạng PDF” trong hộp thoại in.</p>
+                <div id="share-panel" hidden><label for="share-url">Ai có link đều có thể xem lịch trình này.</label><input id="share-url" readonly><div class="journey-actions"><button id="copy-share" type="button" class="secondary-button">Sao chép link</button><button id="stop-share" type="button" class="text-button">Ngừng chia sẻ</button></div><small>Link hiển thị phiên bản đã lưu mới nhất.</small></div>
+                <div id="journey-days"></div>
+            </section>
+        </div>
+        <section id="shared-journey" class="journey-card" hidden><span class="eyebrow">LỊCH TRÌNH ĐƯỢC CHIA SẺ · CHỈ XEM</span><h1 id="shared-title"></h1><button id="print-shared" type="button" class="secondary-button">Xuất PDF</button><p>Chọn “Lưu dưới dạng PDF” trong hộp thoại in.</p><div id="shared-days"></div><a class="secondary-button" href="/journeys">Tạo lịch trình của bạn</a></section>
+        <section id="journey-print" aria-label="Bản in lịch trình"></section>
+    </main>
+    <script src="js/auth.js"></script><script src="js/journeys.js"></script>
+</body></html>

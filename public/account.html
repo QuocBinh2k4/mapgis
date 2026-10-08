@@ -19,7 +19,7 @@
                 <form id="profile-form" class="editor-form"><label>Tên hiển thị<input name="display_name" id="profile-name" maxlength="120" required></label><label>Email Google<input id="profile-email" readonly></label><p class="muted">Email được đồng bộ từ tài khoản Google khi đăng nhập.</p><button class="primary-button" type="submit">Lưu thông tin</button></form>
                 <a href="/admin" id="account-admin" class="secondary-button" hidden>Mở trang quản trị</a><button type="button" id="account-logout" class="text-button danger-text">Đăng xuất</button>
             </section>
-            <section class="account-card favorites-card"><div class="card-heading"><h2>Địa điểm yêu thích</h2><a href="/?view=favorites">Xem trên bản đồ →</a></div><div id="favorite-list" class="favorite-list"></div></section>
+            <section class="account-card favorites-card"><div class="card-heading"><h2>Bộ sưu tập của bạn</h2><a href="/?view=favorites">Xem trên bản đồ →</a></div><a class="secondary-button" href="/journeys">Quản lý Muốn đi / Đã đi & lịch trình</a><div id="favorite-list" class="favorite-list"></div></section>
         </div>
     </main>
     <script src="/js/auth.js"></script><script src="/js/account.js"></script>

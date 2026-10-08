@@ -99,9 +99,9 @@ test('map favorites filter markers, open a saved point and remove it from both l
     const row=ui.get('result-list').children[0];await row.children[0].emit('click');assert.equal(ui.markers[1].open,true);
     await row.children[1].emit('click');
     assert.equal(ui.layers.size,0);assert.equal(ui.get('favorites-count').textContent,0);
-    assert.equal(ui.markers[1].popup.children.at(-1).textContent,'Thêm vào yêu thích');
+    assert.equal(ui.markers[1].popup.children.find(node=>node.tag==='button' && node.attributes['aria-pressed']!==undefined).textContent,'Thêm vào yêu thích');
     await ui.get('view-explore').emit('click');assert.equal(ui.layers.size,3);
-    await ui.markers[0].popup.children.at(-1).emit('click');assert.equal(page.favorites.has(1),true);
+    await ui.markers[0].popup.children.find(node=>node.tag==='button' && node.attributes['aria-pressed']!==undefined).emit('click');assert.equal(page.favorites.has(1),true);
     await ui.get('view-favorites').emit('click');assert.equal(ui.layers.size,1);
 });
 
@@ -112,4 +112,14 @@ test('guest favorites show a login link and logout clears the visible private li
     assert.equal(ui.layers.size,0);assert.equal(ui.get('result-count').textContent,'Chưa đăng nhập');
     const state=ui.get('result-list').children[0];
     assert.ok(state.children.at(-1).href.startsWith('/account?return='));
+});
+
+test('map collections filter want and visited separately',async()=>{
+    const page=setup({id:'member'},async()=>({items:[{id:1,collection:'want'},{id:2,collection:'visited'}]}));await page.favorites.ready;
+    const ui=mapPage(page);await settle();await ui.get('view-favorites').emit('click');
+    assert.equal(ui.layers.size,2);
+    ui.get('map-collection').value='visited';await ui.get('map-collection').emit('change');
+    assert.equal(ui.layers.size,1);assert.ok(ui.layers.has(ui.markers[1]));
+    ui.get('map-collection').value='want';await ui.get('map-collection').emit('change');
+    assert.equal(ui.layers.size,1);assert.ok(ui.layers.has(ui.markers[0]));
 });

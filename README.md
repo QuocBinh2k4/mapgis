@@ -23,6 +23,18 @@ npm start
 
 Migration trong `sql/users-admin.sql` tạo thêm bảng tài khoản trên cùng database Neon và bổ sung trường quản trị vào `diem_du_lich`. Xem [hướng dẫn cấu hình Google, cấp quyền admin và mô hình database](docs/accounts.md).
 
+## Lịch trình và bộ sưu tập
+
+Mở `/journeys` từ menu hoặc từ popup điểm đến. Bộ sưu tập có hai trạng thái **Muốn đi** và **Đã đi**; chuyển trạng thái trong danh sách điểm đến. Mục **Bộ sưu tập** trên bản đồ cũng lọc được hai danh sách này.
+
+Lịch trình hỗ trợ 1–30 ngày, kéo thả điểm trong hoặc giữa các ngày, nút lên/xuống và chuyển ngày trên điện thoại. Nhấn **Lưu lịch trình** để đồng bộ với tài khoản; khi sửa cùng lúc trên nhiều thiết bị, API báo xung đột để tránh ghi đè. Mỗi ngày tối đa 30 điểm, mỗi lịch trình tối đa 150 điểm.
+
+**Chia sẻ bằng link** lưu bản hiện tại và tạo link chỉ xem, không cần đăng nhập. Ai có link đều có thể xem tên lịch trình và các điểm đến; không hiển thị thông tin tài khoản. **Ngừng chia sẻ** vô hiệu hóa link cũ. **Xuất PDF** mở hộp thoại in, chọn **Lưu dưới dạng PDF**; bản in giữ tiếng Việt và thứ tự ngày/điểm đến.
+
+Hai mẫu **3 ngày Hà Giang** và **2 ngày Hội An** tạo bản nháp bằng các điểm thực có trong database, thông báo các điểm chưa có để bổ sung. Các ngày do ứng dụng sắp xếp để tham khảo, chưa tính thời gian di chuyển. Nguồn điểm gợi ý: [Vietnam Tourism — Hà Giang](https://www.vietnam.travel/things-to-do/ha-giang-loop), [Vietnam Tourism — Hội An](https://www.vietnam.travel/places-to-go/central-vietnam/hoi-an).
+
+Chạy `npm run db:init` khi cập nhật: migration `sql/journeys.sql` chuyển yêu thích cũ sang **Muốn đi** và tạo bảng `user_itineraries`. Kiểm tra bằng `npm run journeys:test` và `npm run favorites:test`.
+
 ## Nhập dữ liệu lần đầu
 
 ```powershell

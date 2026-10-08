@@ -131,6 +131,7 @@
         const visible = spots.filter(spot => {
             const props = spot.feature.properties;
             return (!favoritesOnly || (favorites.status === 'ready' && favorites.has(props.id)))
+                && (!favoritesOnly || document.getElementById('map-collection').value === 'all' || !document.getElementById('map-collection').value || favorites.collection?.(props.id) === document.getElementById('map-collection').value)
                 && (selectedType === 'all' || props.ma_loai === selectedType)
                 && (!selectedProvince || normalize(props.ten_tinh) === normalize(selectedProvince))
                 && (!query || normalize(`${props.ten_dia_diem || ''} ${props.ten_tinh || ''}`).includes(query));
@@ -228,6 +229,7 @@
     }
     document.getElementById('search-form').addEventListener('submit', event => { event.preventDefault(); renderSpots(); });
     function updateFavoriteViews() {
+        document.getElementById('collection-filter').hidden = !favoritesOnly;
         document.getElementById('favorites-count').textContent = favorites.status === 'loading' ? '…' : favorites.status === 'error' ? '!' : favorites.count;
         document.getElementById('results-heading').textContent = favoritesOnly ? 'Địa điểm yêu thích của bạn' : 'Điểm đến dành cho bạn';
         for (const [id, active] of [['view-explore', !favoritesOnly], ['view-favorites', favoritesOnly]]) {
@@ -244,6 +246,7 @@
         });
     }
     document.getElementById('view-explore').addEventListener('click', () => { favoritesOnly = false; updateFavoriteViews(); renderSpots(); });
+    document.getElementById('map-collection').addEventListener('change', () => renderSpots());
     document.getElementById('view-favorites').addEventListener('click', () => {
         favoritesOnly = true; search.value = ''; selectedType = 'all';
         document.querySelectorAll('.tag').forEach(tag => { const active = tag.dataset.type === 'all'; tag.classList.toggle('active', active); tag.setAttribute('aria-pressed', String(active)); });
@@ -400,6 +403,9 @@
                         }catch(error){message(error.message);}finally{updateFavoriteViews();}
                     });popup.append(save);
                 }
+                const planLink = element('a', 'secondary-button popup-directions', 'Lưu bộ sưu tập / thêm vào lịch trình');
+                planLink.href = `/journeys?place=${props.id}`;
+                popup.append(planLink);
                 marker.bindPopup(popup).bindTooltip(element('span', '', props.ten_dia_diem || 'Điểm du lịch'), { direction: 'top', offset: [0, -15] });
                 marker.on('click', event => {
                     if (routingUI?.pickStart(event.latlng)) map.closePopup();

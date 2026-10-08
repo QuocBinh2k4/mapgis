@@ -7,6 +7,7 @@ const { registerRouting } = require('./services/routing');
 const { registerAuth } = require('./services/auth');
 const { registerAdmin } = require('./services/admin');
 const { registerData } = require('./services/data');
+const { registerJourneys } = require('./services/journeys');
 
 const app = express();
 const pool = new Pool(databaseConfig());
@@ -26,11 +27,13 @@ app.use((error, req, res, next) => {
 });
 registerRouting(app, pool);
 const auth=registerAuth(app,pool);
+registerJourneys(app,pool,auth);
 registerAdmin(app,pool,auth);
 registerData(app,pool);
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/account', (req,res)=>res.sendFile(path.join(__dirname,'public','account.html')));
+app.get('/journeys', (req,res)=>res.sendFile(path.join(__dirname,'public','journeys.html')));
 app.get('/admin', (req,res)=>res.sendFile(path.join(__dirname,'public','admin.html')));
 
 if (require.main === module) {

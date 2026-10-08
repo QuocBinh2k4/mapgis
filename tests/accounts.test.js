@@ -8,6 +8,7 @@ const {createClient}=require('../scripts/db');
 const {registerAuth}=require('../services/auth');
 const {registerAdmin,tourismInput}=require('../services/admin');
 const {registerData}=require('../services/data');
+const {registerJourneys}=require('../services/journeys');
 const {validateRequest}=require('../services/routing');
 const {routeValhalla}=require('../services/valhalla');
 
@@ -20,7 +21,7 @@ test('tourism editor rejects unsafe image URLs, nonnumeric coordinates and inval
 test('Google registration, sessions, CSRF, admin permissions and tourism lifecycle use an isolated rollback schema',async(t)=>{
     const client=createClient();let server;
     const schema=`accounts_test_${crypto.randomBytes(6).toString('hex')}`;
-    const tables=['app_users','app_sessions','app_login_challenges','user_favorites','admin_audit_logs','diem_du_lich','ranh_gioi_tinh','danh_muc_loai'];
+    const tables=['app_users','app_sessions','app_login_challenges','user_favorites','user_itineraries','admin_audit_logs','diem_du_lich','ranh_gioi_tinh','danh_muc_loai'];
     const names=new RegExp(`\\b(${tables.join('|')})\\b`,'g');
     const rewrite=sql=>sql.replace(names,name=>`${schema}.${name}`);
     let serial=0, base;
@@ -58,9 +59,11 @@ test('Google registration, sessions, CSRF, admin permissions and tourism lifecyc
             INSERT INTO ${schema}.danh_muc_loai(ma_loai,ten_loai) VALUES('DI_TICH','Di tích');
             INSERT INTO ${schema}.diem_du_lich(ten_dia_diem,loai_id,ma_tinh,geom) VALUES('Điểm có sẵn',1,'01',ST_SetSRID(ST_MakePoint(105.5,21.5),4326))`);
         await client.query(rewrite(fs.readFileSync(path.join(__dirname,'../sql/users-admin.sql'),'utf8')));
+        await client.query(rewrite(fs.readFileSync(path.join(__dirname,'../sql/journeys.sql'),'utf8')));
         const app=express();app.use(express.json());
         const auth=registerAuth(app,pool,{clientId:'test.apps.googleusercontent.com',origin:'http://localhost:3000',adminEmails:'admin@gmail.com,outside@example.com',verifyCredential:async credential=>{verificationCalls++;if(!payloads.has(credential))throw Error('Invalid Google token');return payloads.get(credential);}});
         registerAdmin(app,pool,auth);registerData(app,pool);
+        registerJourneys(app,pool,auth);
         server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));base=`http://127.0.0.1:${server.address().port}`;
         const guest=browser(),member=browser(),admin=browser();let memberSession,adminSession;
         await t.test('unauthenticated visitors cannot read admin records',async()=>{
@@ -93,6 +96,40 @@ test('Google registration, sessions, CSRF, admin permissions and tourism lifecyc
             assert.equal((await member.request('/api/me/favorites/1','PUT',null,memberSession.csrfToken)).status,200);
             assert.equal((await member.request('/api/me/favorites')).data.items.length,1);
             assert.equal((await admin.request('/api/me/favorites')).data.items.length,0);
+        });
+        await t.test('collections migrate to want and can move to visited without duplicate favorites',async()=>{
+            assert.equal((await member.request('/api/me/favorites')).data.items[0].collection,'want');
+            assert.equal((await member.request('/api/me/favorites/1','PUT',{collection:'visited'},memberSession.csrfToken)).status,200);
+            const saved=(await member.request('/api/me/favorites')).data.items;
+            assert.equal(saved.length,1);assert.equal(saved[0].collection,'visited');
+            assert.equal((await member.request('/api/me/favorites/1','PUT',{collection:'bad'},memberSession.csrfToken)).status,400);
+        });
+        await t.test('itineraries enforce ownership, CSRF, versions and revocable anonymous sharing',async()=>{
+            const body={title:'Chuyến đi thử',days:[{places:[1]},{places:[]}]};
+            assert.equal((await guest.request('/api/me/itineraries')).status,401);
+            assert.equal((await member.request('/api/me/itineraries','POST',body)).status,403);
+            assert.equal((await member.request('/api/me/itineraries','POST',{...body,days:[{places:[99999]}]},memberSession.csrfToken)).status,400);
+            const created=await member.request('/api/me/itineraries','POST',body,memberSession.csrfToken);
+            assert.equal(created.status,201);const id=created.data.item.id;
+            assert.equal((await admin.request('/api/me/itineraries')).data.items.length,0);
+            assert.equal((await admin.request(`/api/me/itineraries/${id}`,'PUT',{...body,version:1},adminSession.csrfToken)).status,404);
+            assert.equal((await admin.request(`/api/me/itineraries/${id}/share`,'PUT',{enabled:true},adminSession.csrfToken)).status,404);
+            assert.equal((await admin.request(`/api/me/itineraries/${id}`,'DELETE',null,adminSession.csrfToken)).status,404);
+            const edit={title:'Đã sửa',days:[{places:[]},{places:[1]}],version:1};
+            assert.equal((await member.request(`/api/me/itineraries/${id}`,'PUT',edit,memberSession.csrfToken)).status,200);
+            assert.equal((await member.request(`/api/me/itineraries/${id}`,'PUT',edit,memberSession.csrfToken)).status,409);
+            const shared=await member.request(`/api/me/itineraries/${id}/share`,'PUT',{enabled:true},memberSession.csrfToken);
+            const token=shared.data.item.share_token;
+            const publicTrip=await guest.request(`/api/shared/itineraries/${token}`);
+            assert.equal(publicTrip.status,200);assert.equal(publicTrip.data.item.title,'Đã sửa');
+            assert.deepEqual(publicTrip.data.item.days,edit.days);
+            assert.ok(!('user_id' in publicTrip.data.item));assert.equal(publicTrip.data.places[0].id,1);
+            await member.request(`/api/me/itineraries/${id}/share`,'PUT',{enabled:false},memberSession.csrfToken);
+            assert.equal((await guest.request(`/api/shared/itineraries/${token}`)).status,404);
+            const again=await member.request(`/api/me/itineraries/${id}/share`,'PUT',{enabled:true},memberSession.csrfToken);
+            assert.notEqual(again.data.item.share_token,token);
+            assert.equal((await member.request(`/api/me/itineraries/${id}`,'DELETE',null,memberSession.csrfToken)).status,200);
+            assert.equal((await guest.request(`/api/shared/itineraries/${again.data.item.share_token}`)).status,404);
         });
         await t.test('session hashes, expiry, one-use login challenges and Google subjects protect account identity',async()=>{
             const token=member.jar.get('mapgis_session');

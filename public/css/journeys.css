@@ -1,0 +1,44 @@
+.journeys-page { overflow:auto; height:auto; min-height:100vh; background:#f4f7f4; }
+.journeys-main { max-width:1320px; margin:auto; padding:40px 24px 64px; }
+.journeys-intro h1 { font-size:clamp(28px,4vw,42px); line-height:1.2; margin:12px 0; }
+.journeys-intro p,.journey-card p,.journey-card small { color:var(--muted); line-height:1.6; }
+.journey-layout { display:grid; grid-template-columns:360px minmax(0,1fr); gap:24px; align-items:start; }
+.journey-card { background:white; border:1px solid var(--border); border-radius:16px; padding:24px; margin-bottom:20px; min-width:0; }
+.journey-card h2 { font-size:20px; margin:0 0 18px; }
+.journey-card label { display:block; font-size:13px; font-weight:600; margin:12px 0 8px; }
+.journey-card input,.journey-card select { width:100%; border:1px solid #c7d9d0; padding:11px; border-radius:8px; background:white; color:var(--ink); font:inherit; font-size:14px; }
+.journey-actions { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; align-items:center; }
+.journey-actions button { min-height:40px; }
+.collection-place { border-bottom:1px solid var(--border); padding:16px 0; }
+.collection-place a { font-weight:600; text-decoration:none; }
+.collection-place small { display:block; margin:4px 0; }
+.collection-place .journey-actions { margin:8px 0 0; }
+.collection-place select { width:auto; max-width:100%; }
+.template-button,.saved-journey { display:block; width:100%; padding:14px; border:1px solid var(--border); background:#f4f9f5; border-radius:10px; text-align:left; color:var(--ink); margin-top:10px; cursor:pointer; }
+.template-button small { display:block; margin-top:5px; }
+.saved-journey[aria-pressed="true"] { border-color:var(--primary); background:#e5f2ec; }
+.itinerary-day { border:1px solid var(--border); border-radius:12px; padding:18px; margin-top:18px; background:#fafcf9; }
+.day-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.day-heading h3 { margin:0; font-size:18px; }
+.day-stops { min-height:65px; padding:0; list-style:none; }
+.itinerary-stop { padding:12px; background:white; border:1px solid var(--border); border-radius:9px; margin:10px 0; }
+.itinerary-stop[draggable="true"] { cursor:grab; }
+.itinerary-stop .journey-actions { margin:8px 0 0; }
+.itinerary-stop select { width:auto; }
+.itinerary-stop a { font-weight:600; text-decoration:none; }
+.drop-target { outline:2px dashed var(--primary); outline-offset:3px; }
+#share-panel { background:#eef7f1; padding:15px; border-radius:10px; }
+#journey-status { min-height:24px; line-height:1.5; }
+#journey-print { display:none; }
+[hidden] { display:none !important; }
+@media(max-width:850px) { .journey-layout { grid-template-columns:1fr; } .journeys-main { padding:24px 14px; } .journey-card { padding:18px; } .site-header { height:auto; min-height:70px; flex-wrap:wrap; gap:12px; padding:16px; } .site-header nav { flex-wrap:wrap; gap:12px; } }
+@media print {
+    @page { size:A4; margin:18mm; }
+    body.journeys-page { background:white; color:#111; }
+    .site-header,.journeys-main > :not(#journey-print) { display:none !important; }
+    .journeys-main { padding:0; margin:0; max-width:none; }
+    #journey-print { display:block; font-family:Arial,sans-serif; }
+    #journey-print h1 { font-size:26px; }
+    #journey-print section { break-inside:avoid; margin:20px 0; }
+    #journey-print li { margin:10px 0; line-height:1.6; }
+}

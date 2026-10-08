@@ -23,6 +23,7 @@
         <nav aria-label="Điều hướng chính">
             <a class="nav-link current" href="#map-container" aria-current="page">Khám phá bản đồ</a>
             <a class="nav-link" href="#guide" id="guide-link">Cách khám phá</a>
+            <a class="nav-link" href="/journeys">Lịch trình</a>
             <a class="nav-link" href="/admin" id="admin-link" hidden>Quản trị</a>
             <a class="nav-link header-account" href="/account" id="auth-link">Đăng nhập</a>
         </nav>
@@ -41,8 +42,9 @@
             <section class="explore-tools" id="explore-tools" aria-labelledby="search-heading">
                 <div class="destination-views" role="group" aria-label="Danh sách địa điểm">
                     <button type="button" id="view-explore" class="destination-view active" aria-pressed="true" aria-controls="destinations">Khám phá</button>
-                    <button type="button" id="view-favorites" class="destination-view" aria-pressed="false" aria-controls="destinations"><i class="fa-regular fa-heart" aria-hidden="true"></i> Yêu thích <span id="favorites-count">0</span></button>
+                    <button type="button" id="view-favorites" class="destination-view" aria-pressed="false" aria-controls="destinations"><i class="fa-regular fa-heart" aria-hidden="true"></i> Bộ sưu tập <span id="favorites-count">0</span></button>
                 </div>
+                <div id="collection-filter" hidden><label for="map-collection">Danh sách đã lưu</label><select id="map-collection"><option value="all">Tất cả bộ sưu tập</option><option value="want">Muốn đi</option><option value="visited">Đã đi</option></select><a href="/journeys">Quản lý & lập lịch trình →</a></div>
                 <h2 id="search-heading">Bạn muốn đi đâu?</h2>
                 <form class="search-box" id="search-form" role="search">
                     <label class="sr-only" for="searchInput">Tên điểm đến hoặc tỉnh, thành phố</label>
@@ -112,8 +114,8 @@
                     <section id="map-layer-panel" class="map-layer-panel" aria-labelledby="map-layer-title" hidden>
                         <div class="map-layer-header"><div><span class="eyebrow">GÓC NHÌN CỦA BẠN</span><h2 id="map-layer-title">Lớp bản đồ</h2></div><button type="button" id="map-layer-close" aria-label="Đóng lớp bản đồ"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
                         <div class="map-layer-options" role="group" aria-label="Chọn lớp nền bản đồ">
-                            <button type="button" class="map-layer-option active" data-layer="street" aria-pressed="true"><span class="layer-preview preview-street" aria-hidden="true"></span><span class="layer-description"><strong>Đường phố</strong><small>Tên đường và địa danh</small></span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
-                            <button type="button" class="map-layer-option" data-layer="satellite" aria-pressed="false"><span class="layer-preview preview-satellite" aria-hidden="true"></span><span class="layer-description"><strong>Vệ tinh</strong><small>Khám phá từ trên cao</small></span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
+                            <button type="button" class="map-layer-option active" data-layer="street" aria-pressed="false"><span class="layer-preview preview-street" aria-hidden="true"></span><span class="layer-description"><strong>Đường phố</strong><small>Tên đường và địa danh</small></span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
+                            <button type="button" class="map-layer-option" data-layer="satellite" aria-pressed="true"><span class="layer-preview preview-satellite" aria-hidden="true"></span><span class="layer-description"><strong>Vệ tinh</strong><small>Khám phá từ trên cao</small></span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
                             <button type="button" class="map-layer-option" data-layer="terrain" aria-pressed="false"><span class="layer-preview preview-terrain" aria-hidden="true"></span><span class="layer-description"><strong>Địa hình</strong><small>Núi, đồi và cảnh quan</small></span><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
                         </div>
                     </section>

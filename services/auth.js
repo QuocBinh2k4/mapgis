@@ -138,7 +138,7 @@ function registerAuth(app, pool, options = {}) {
     }));
     app.get('/api/me/favorites',api(async(req,res)=>{
         const user=await requireUser(req);
-        const rows=(await pool.query(`SELECT d.id,d.ten_dia_diem,p.ten_tinh,f.created_at FROM user_favorites f
+        const rows=(await pool.query(`SELECT d.id,d.ten_dia_diem,p.ten_tinh,f.created_at,f.collection FROM user_favorites f
             JOIN diem_du_lich d ON d.id=f.tourism_id LEFT JOIN ranh_gioi_tinh p ON p.ma_tinh=d.ma_tinh
             WHERE f.user_id=$1 AND d.deleted_at IS NULL ORDER BY f.created_at DESC`,[user.id])).rows;
         res.json({items:rows});
@@ -148,8 +148,10 @@ function registerAuth(app, pool, options = {}) {
         const id=Number(req.params.id);
         if (!Number.isSafeInteger(id) || id<1) throw new ApiError('Mã điểm du lịch không hợp lệ.');
         if (method==='put') {
-            const inserted=(await pool.query(`INSERT INTO user_favorites(user_id,tourism_id) SELECT $1,id FROM diem_du_lich
-                WHERE id=$2 AND deleted_at IS NULL ON CONFLICT DO NOTHING RETURNING tourism_id`,[user.id,id])).rows;
+            const collection=req.body?.collection ?? 'want';
+            if (!['want','visited'].includes(collection)) throw new ApiError('Bộ sưu tập không hợp lệ.');
+            const inserted=(await pool.query(`INSERT INTO user_favorites(user_id,tourism_id,collection) SELECT $1,id,$3 FROM diem_du_lich
+                WHERE id=$2 AND deleted_at IS NULL ON CONFLICT(user_id,tourism_id) DO UPDATE SET collection=EXCLUDED.collection RETURNING tourism_id`,[user.id,id,collection])).rows;
             if (!inserted.length && !(await pool.query('SELECT id FROM diem_du_lich WHERE id=$1 AND deleted_at IS NULL',[id])).rows.length) throw new ApiError('Không tìm thấy điểm du lịch.',404);
         } else await pool.query('DELETE FROM user_favorites WHERE user_id=$1 AND tourism_id=$2',[user.id,id]);
         res.json({saved:method==='put'});

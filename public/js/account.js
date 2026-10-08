@@ -17,7 +17,7 @@
             data.items.forEach(place=>{
                 const card=element('article','','favorite-item'), info=element('div');
                 const link=element('a',place.ten_dia_diem);link.href=`/?place=${place.id}`;
-                info.append(link,element('p',place.ten_tinh || 'Việt Nam','muted'));
+                info.append(link,element('p',`${place.ten_tinh || 'Việt Nam'} · ${place.collection==='visited'?'Đã đi':'Muốn đi'}`,'muted'));
                 const remove=element('button','Bỏ lưu','text-button');remove.type='button';
                 remove.addEventListener('click',async()=>{remove.disabled=true;try{await auth.request(`/api/me/favorites/${place.id}`,{method:'DELETE'});await favorites();}catch(error){message(error.message);remove.disabled=false;}});
                 card.append(info,remove);list.append(card);
