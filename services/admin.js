@@ -89,6 +89,14 @@ function registerAdmin(app,pool,auth) {
         const [provinces,categories]=await Promise.all([pool.query('SELECT ma_tinh,ten_tinh FROM ranh_gioi_tinh ORDER BY ten_tinh'),pool.query('SELECT id,ma_loai,ten_loai FROM danh_muc_loai ORDER BY ten_loai')]);
         res.json({provinces:provinces.rows,categories:categories.rows});
     }));
+    app.get('/api/admin/photos',api(async(req,res)=>{
+        await requireAdmin(req);
+        const items=(await pool.query(`SELECT p.id,p.tourism_id,p.caption,p.created_at,p.mime_type,p.byte_size,
+                d.ten_dia_diem,u.display_name AS uploader
+            FROM place_photos p JOIN diem_du_lich d ON d.id=p.tourism_id JOIN app_users u ON u.id=p.user_id
+            ORDER BY p.created_at DESC,p.id DESC LIMIT 100`)).rows;
+        res.json({items:items.map(item=>({...item,image_url:`/api/tourism-photos/${item.id}/image`}))});
+    }));
     app.get('/api/admin/users',api(async(req,res)=>{
         await requireAdmin(req);
         const {page,limit,offset}=pagination(req.query);

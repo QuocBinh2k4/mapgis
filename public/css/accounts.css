@@ -21,6 +21,11 @@
 .editor-form textarea { resize: vertical; min-height: 95px; }
 .destination-editor-fields { border:1px solid var(--border); border-radius:10px; padding:18px; display:grid; gap:12px; min-width:0; }
 .destination-editor-fields legend { font-weight:600; padding:0 8px; }
+.admin-photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+.admin-photo-card { overflow:hidden; display:grid; gap:10px; padding:12px; border:1px solid var(--border); border-radius:12px; background:#fff; }
+.admin-photo-card img { width:100%; height:175px; object-fit:cover; border-radius:8px; }
+.admin-photo-card p,.admin-photo-card small { display:block; margin:6px 0; overflow-wrap:anywhere; }
+.admin-photo-card a { color:var(--primary); font-weight:600; text-decoration:none; }
 .destination-editor-fields textarea { min-height:75px; }
 #place-story { min-height:150px; }
 .editor-form .primary-button { justify-self: start; }

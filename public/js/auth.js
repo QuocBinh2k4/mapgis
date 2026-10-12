@@ -18,8 +18,8 @@
         }
         return data;
     }
-    async function upload(file) {
-        const response=await fetch('/api/admin/uploads',{method:'POST',credentials:'same-origin',headers:{'Content-Type':file.type,...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},body:file});
+    async function upload(file,url='/api/admin/uploads') {
+        const response=await fetch(url,{method:'POST',credentials:'same-origin',headers:{'Content-Type':file.type,...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},body:file});
         const data=await response.json().catch(()=>({error:'Máy chủ trả về dữ liệu không hợp lệ.'}));
         if(!response.ok){if(response.status===401&&user){user=null;csrfToken=null;announce();}const error=new Error(data.error||'Không tải được ảnh lên.');error.status=response.status;throw error;}
         return data;

@@ -26,7 +26,20 @@
         const data=await auth.request('/api/admin/stats');
         for(const [id,key] of [['users','users'],['tourism','tourism'],['archived','archived_tourism'],['favorites','favorites']])byId(`stat-${id}`).textContent=data[key].toLocaleString('vi-VN');
     }
+    async function loadPhotos() {
+        const grid=byId('admin-photo-grid');grid.replaceChildren(element('p','Đang tải ảnh…','muted'));
+        try{
+            const data=await auth.request('/api/admin/photos');grid.replaceChildren();
+            if(!data.items.length){grid.append(element('p','Chưa có ảnh người dùng gửi.','muted'));return;}
+            data.items.forEach(photo=>{
+                const card=element('article','','admin-photo-card'),image=element('img');image.src=photo.image_url;image.alt=photo.caption||`Ảnh ${photo.ten_dia_diem}`;image.loading='lazy';
+                const info=element('div');info.append(element('strong',photo.ten_dia_diem),element('p',photo.caption||'Không có ghi chú'),element('small',`${photo.uploader} · ${dates(photo.created_at)} · ${(photo.byte_size/1024/1024).toFixed(1)} MB`));
+                const link=element('a','Mở địa điểm');link.href=`/diem-den/id/${photo.tourism_id}`;card.append(image,info,link);grid.append(card);
+            });
+        }catch(error){grid.replaceChildren(element('p',error.message,'muted'));if(denied(error))return;message(error.message,true);}
+    }
     async function load(tab) {
+        if(tab==='photos')return loadPhotos();
         const serial=++serials[tab];
         const parameters=new URLSearchParams({page:pages[tab],limit:25});
         if(tab==='tourism'){parameters.set('q',byId('tourism-query').value);parameters.set('state',byId('tourism-state').value);parameters.set('province',byId('tourism-province').value);}

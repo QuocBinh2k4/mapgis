@@ -9,6 +9,7 @@ const { registerAdmin } = require('./services/admin');
 const { registerData } = require('./services/data');
 const { registerJourneys } = require('./services/journeys');
 const { registerDestinations } = require('./services/destinations');
+const { registerPlacePhotos } = require('./services/place-photos');
 
 const app = express();
 const pool = new Pool(databaseConfig());
@@ -32,6 +33,7 @@ registerJourneys(app,pool,auth);
 registerAdmin(app,pool,auth);
 registerData(app,pool);
 registerDestinations(app,pool);
+registerPlacePhotos(app,pool,auth);
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/account', (req,res)=>res.sendFile(path.join(__dirname,'public','account.html')));

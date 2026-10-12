@@ -27,4 +27,40 @@
             const input=document.getElementById('destination-share-url');input.hidden=false;input.focus();input.select();status.textContent='Hãy sao chép link trong ô đã chọn.';
         }
     });
+    const community=document.getElementById('community-photos'),auth=globalThis.MapAuth;
+    if(community&&auth){
+        const placeId=community.dataset.tourismId,form=document.getElementById('community-photo-form'),login=document.getElementById('community-photo-login');
+        const grid=document.getElementById('community-photo-grid'),status=document.getElementById('community-photo-status');
+        const announce=text=>{status.textContent=text;};
+        async function loadCommunityPhotos(){
+            if(!auth.user){form.hidden=true;login.hidden=false;grid.replaceChildren();return;}
+            form.hidden=false;login.hidden=true;
+            try{
+                const data=await auth.request(`/api/tourism/${placeId}/photos`);
+                grid.replaceChildren();
+                data.items.forEach(photo=>{
+                    const card=document.createElement('article');card.className='community-photo-card';
+                    const image=document.createElement('img');image.src=photo.image_url;image.alt=photo.caption||'Ảnh do người dùng đăng';image.loading='lazy';
+                    const detail=document.createElement('p');detail.textContent=[photo.caption,photo.uploader].filter(Boolean).join(' · ');
+                    card.append(image,detail);grid.append(card);
+                });
+                if(!data.items.length)announce('Bạn chưa gửi ảnh nào cho địa điểm này.');
+            }catch(error){announce(error.message);}
+        }
+        form.addEventListener('submit',async event=>{
+            event.preventDefault();
+            const file=document.getElementById('community-photo-file').files[0],caption=document.getElementById('community-photo-caption').value.trim();
+            if(!file)return;
+            if(!['image/jpeg','image/png','image/webp'].includes(file.type)){announce('Chọn ảnh JPEG, PNG hoặc WebP.');return;}
+            if(file.size>4*1024*1024){announce('Ảnh tải lên tối đa 4 MB.');return;}
+            const submit=form.querySelector('[type=submit]');submit.disabled=true;
+            try{
+                await auth.upload(file,`/api/tourism/${placeId}/photos?caption=${encodeURIComponent(caption)}`);
+                form.reset();announce('Ảnh đã gửi. Chỉ bạn và quản trị viên có thể xem ảnh này.');await loadCommunityPhotos();
+            }catch(error){announce(error.message);}
+            finally{submit.disabled=false;}
+        });
+        auth.ready.then(loadCommunityPhotos);
+        window.addEventListener('mapgis-auth-change',loadCommunityPhotos);
+    }
 })();
