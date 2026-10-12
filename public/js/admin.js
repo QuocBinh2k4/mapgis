@@ -1,6 +1,6 @@
 (() => {
     const byId=id=>document.getElementById(id), auth=window.MapAuth;
-    const contentKeys=['story','opening_hours','ticket_price','best_season','transport','cultural_notes'];
+    const contentKeys=['story','opening_hours','ticket_price','best_season','transport','cultural_notes','tips'];
     const contentFields=byId('destination-fields').content.cloneNode(true);
     byId('tourism-form').insertBefore(contentFields,byId('tourism-form').querySelector('.form-row'));
     const pages={tourism:1,users:1,audit:1}, serials={tourism:0,users:0,audit:0};
@@ -85,6 +85,31 @@
             if(place)editorPosition();else editorMap.setView([16,106],5);
         });
     }
+    async function uploadImage(file) {
+        if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Chọn ảnh JPEG, PNG hoặc WebP.');
+        if(file.size>4*1024*1024)throw new Error('Mỗi ảnh tối đa 4 MB.');
+        const result=await auth.upload(file);
+        return {url:new URL(result.url,location.href).href,mime_type:result.mime_type};
+    }
+    byId('place-image-file').addEventListener('change',async event=>{
+        const file=event.currentTarget.files[0];if(!file)return;
+        event.currentTarget.disabled=true;
+        try{const image=await uploadImage(file);byId('place-image').value=image.url;message('Đã tải ảnh bìa lên. Lưu điểm du lịch để áp dụng ảnh.',false,'tourism-editor-message');}
+        catch(error){if(!denied(error))message(error.message,true,'tourism-editor-message');}
+        finally{event.currentTarget.disabled=false;event.currentTarget.value='';}
+    });
+    byId('place-gallery-files').addEventListener('change',async event=>{
+        const input=event.currentTarget,files=Array.from(input.files || []);if(!files.length)return;
+        const lines=byId('place-gallery').value.split('\n').map(line=>line.trim()).filter(Boolean);
+        if(lines.length+files.length>8){message('Thư viện chỉ có tối đa 8 ảnh. Hãy bỏ bớt ảnh trước khi tải lên.',true,'tourism-editor-message');input.value='';return;}
+        input.disabled=true;
+        try{
+            for(const file of files){const image=await uploadImage(file);lines.push(`${image.url} | ${file.name.replace(/[|\n\r]/g,' ').slice(0,200)} |`);}
+            byId('place-gallery').value=lines.join('\n');
+            message(`Đã tải lên ${files.length} ảnh. Lưu điểm du lịch để áp dụng thư viện.`,false,'tourism-editor-message');
+        }catch(error){if(!denied(error))message(error.message,true,'tourism-editor-message');}
+        finally{input.disabled=false;input.value='';}
+    });
     async function openUser(id) {
         const data=await auth.request(`/api/admin/users/${id}`);selectedUser=data.user;
         byId('user-email').value=data.user.email;byId('user-name').value=data.user.display_name;byId('user-role').value=data.user.role;byId('user-status').value=data.user.status;

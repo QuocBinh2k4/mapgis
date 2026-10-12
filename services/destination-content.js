@@ -13,7 +13,7 @@ function contentInput(value) {
     if (value===undefined) return undefined;
     if (!value || typeof value!=='object' || Array.isArray(value)) throw new ApiError('Thông tin chi tiết không hợp lệ.');
     const result={};
-    for (const [key,max] of Object.entries({story:4000,opening_hours:600,ticket_price:600,best_season:1000,transport:2000,cultural_notes:2000})) {
+    for (const [key,max] of Object.entries({story:4000,opening_hours:600,ticket_price:600,best_season:1000,transport:2000,cultural_notes:2000,tips:2000})) {
         if (value[key]==null || value[key]==='') continue;
         if (typeof value[key]!=='string' || value[key].length>max) throw new ApiError(`Thông tin ${key} không hợp lệ hoặc quá dài.`);
         result[key]=value[key].trim();

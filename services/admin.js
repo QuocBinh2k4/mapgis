@@ -1,5 +1,8 @@
 const { ApiError } = require('./auth');
 const { contentInput, assignSlug } = require('./destination-content');
+const express = require('express');
+const { randomUUID } = require('node:crypto');
+const uploadImageBody = express.raw({type:'*/*',limit:'4mb'});
 function pagination(query) {
     const page=Number(query.page || 1), limit=Number(query.limit || 25);
     if (!Number.isSafeInteger(page) || page<1 || page>100000 || !Number.isSafeInteger(limit) || limit<1 || limit>100) throw new ApiError('Phân trang không hợp lệ.');
@@ -37,6 +40,24 @@ const tourismColumns = `d.id,d.ten_dia_diem,d.loai_id,d.ma_tinh,d.dia_chi,d.mo_t
     d.slug,d.chi_tiet,d.deleted_at,d.updated_at,d.version,ST_X(ST_Transform(d.geom,4326)) AS lng,ST_Y(ST_Transform(d.geom,4326)) AS lat,p.ten_tinh,l.ten_loai`;
 function registerAdmin(app,pool,auth) {
     const {api,requireAdmin,publicUser}=auth;
+    app.post('/api/admin/uploads', (req,res,next)=>uploadImageBody(req,res,error=>{
+        if(error)return res.status(error.type==='entity.too.large'?413:400).json({error:error.type==='entity.too.large'?'Ảnh vượt quá giới hạn 4 MB.':'Không đọc được ảnh tải lên.'});
+        next();
+    }), api(async(req,res)=>{
+        const actor=await requireAdmin(req,true);
+        const mime=String(req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+        const data=req.body;
+        const signatures={
+            'image/jpeg':data=>data?.length>=3 && data[0]===0xff && data[1]===0xd8 && data[2]===0xff,
+            'image/png':data=>data?.length>=8 && data.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])),
+            'image/webp':data=>data?.length>=12 && data.toString('ascii',0,4)==='RIFF' && data.toString('ascii',8,12)==='WEBP'
+        };
+        if(!Buffer.isBuffer(data) || !data.length || !signatures[mime]?.(data)) throw new ApiError('Chỉ nhận ảnh JPEG, PNG hoặc WebP hợp lệ, tối đa 4 MB.');
+        const extension={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[mime];
+        const {put}=await import('@vercel/blob');
+        const blob=await put(`tourism/${randomUUID()}.${extension}`,data,{access:'public',contentType:mime,addRandomSuffix:true});
+        res.status(201).json({url:blob.url,mime_type:mime,byte_size:data.length});
+    }));
     async function mutation(req,action,resourceType,resourceId,callback) {
         const actor=await requireAdmin(req,true);
         const client=await pool.connect();

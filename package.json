@@ -33,6 +33,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vercel/blob": "^2.8.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "google-auth-library": "^11.2.0",

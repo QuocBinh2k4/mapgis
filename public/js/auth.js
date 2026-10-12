@@ -18,9 +18,15 @@
         }
         return data;
     }
+    async function upload(file) {
+        const response=await fetch('/api/admin/uploads',{method:'POST',credentials:'same-origin',headers:{'Content-Type':file.type,...(csrfToken?{'X-CSRF-Token':csrfToken}:{})},body:file});
+        const data=await response.json().catch(()=>({error:'Máy chủ trả về dữ liệu không hợp lệ.'}));
+        if(!response.ok){if(response.status===401&&user){user=null;csrfToken=null;announce();}const error=new Error(data.error||'Không tải được ảnh lên.');error.status=response.status;throw error;}
+        return data;
+    }
     async function refresh() {
         const data=await request('/api/auth/me'); user=data.user; csrfToken=data.csrfToken; announce(); return user;
     }
-    window.MapAuth={request,refresh,get user(){return user;},setSession(data){user=data.user;csrfToken=data.csrfToken || csrfToken;announce();},async logout(){await request('/api/auth/logout',{method:'POST'});user=null;csrfToken=null;announce();}};
+    window.MapAuth={request,upload,refresh,get user(){return user;},setSession(data){user=data.user;csrfToken=data.csrfToken || csrfToken;announce();},async logout(){await request('/api/auth/logout',{method:'POST'});user=null;csrfToken=null;announce();}};
     window.MapAuth.ready=refresh().catch(()=>{announce();return null;});
 })();

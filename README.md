@@ -10,6 +10,8 @@ Copy-Item .env.example .env
 
 Nếu đã có `.env` thì chỉnh file hiện có, không ghi đè. Trên Vercel, thêm `DATABASE_URL` trong Environment Variables rồi redeploy. `.env` không được đưa lên Git. Đường dẫn kết nối phải có SSL, ví dụ `?sslmode=verify-full`.
 
+Ảnh tải lên ở trang quản trị được lưu trong **Vercel Blob Storage**; Neon chỉ lưu URL của ảnh trong `hinh_anh_url` và nội dung thư viện ảnh. Trong Vercel, tạo Blob store **Public** cho project và bật môi trường Production/Preview. Để upload khi chạy local, kết nối môi trường Development rồi chạy `vercel env pull` hoặc điền `BLOB_READ_WRITE_TOKEN` vào `.env`. Ảnh là public để hiển thị trực tiếp trên bản đồ và trang giới thiệu.
+
 ## Tài khoản Google và trang admin
 
 Trang `/account` cho phép đăng ký/đăng nhập Google, cập nhật tên và quản lý điểm đến đã lưu. Trang `/admin` quản lý người dùng, quyền truy cập, phiên đăng nhập, điểm du lịch và nhật ký thay đổi. Mã đăng nhập đã được tích hợp; cần điền `GOOGLE_CLIENT_ID`, `APP_ORIGIN` và `ADMIN_EMAILS` để sử dụng tài khoản Google thật.
