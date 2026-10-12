@@ -1,5 +1,8 @@
 (() => {
     const byId=id=>document.getElementById(id), auth=window.MapAuth;
+    const contentKeys=['story','opening_hours','ticket_price','best_season','transport','cultural_notes'];
+    const contentFields=byId('destination-fields').content.cloneNode(true);
+    byId('tourism-form').insertBefore(contentFields,byId('tourism-form').querySelector('.form-row'));
     const pages={tourism:1,users:1,audit:1}, serials={tourism:0,users:0,audit:0};
     let selectedPlace=null, selectedUser=null, editorMap=null, editorMarker=null;
     const element=(tag,text,className)=>{const node=document.createElement(tag);if(text!=null)node.textContent=text;if(className)node.className=className;return node;};
@@ -70,6 +73,10 @@
         selectedPlace=place;byId('tourism-form').reset();message('',false,'tourism-editor-message');
         byId('tourism-editor-title').textContent=place?'Sửa điểm du lịch':'Thêm điểm du lịch';
         for(const [id,key] of [['name','ten_dia_diem'],['category','loai_id'],['address','dia_chi'],['description','mo_ta_ngan'],['image','hinh_anh_url'],['lat','lat'],['lng','lng']])byId(`place-${id}`).value=place?.[key] ?? '';
+        const details=place?.chi_tiet || {};
+        contentKeys.forEach(key=>{byId(`place-${key}`).value=details[key] || '';});
+        byId('place-gallery').value=(details.gallery || []).map(item=>[item.url,item.caption || '',item.credit || ''].join(' | ')).join('\n');
+        byId('place-sources').value=(details.sources || []).map(item=>[item.url,item.label || ''].join(' | ')).join('\n');
         byId('tourism-editor').showModal();
         requestAnimationFrame(()=>{
             if(!window.L)return;
@@ -107,6 +114,8 @@
     byId('tourism-form').addEventListener('submit',async event=>{
         event.preventDefault();const submit=event.currentTarget.querySelector('[type=submit]');submit.disabled=true;
         const body={ten_dia_diem:byId('place-name').value,loai_id:Number(byId('place-category').value),dia_chi:byId('place-address').value,mo_ta_ngan:byId('place-description').value,hinh_anh_url:byId('place-image').value,lat:Number(byId('place-lat').value),lng:Number(byId('place-lng').value),...(selectedPlace?{version:selectedPlace.version}:{})};
+        const lines=id=>byId(id).value.split('\n').map(line=>line.trim()).filter(Boolean).map(line=>line.split('|').map(value=>value.trim()));
+        body.chi_tiet={...Object.fromEntries(contentKeys.map(key=>[key,byId(`place-${key}`).value])),gallery:lines('place-gallery').map(([url,caption='',credit=''])=>({url,caption,credit})),sources:lines('place-sources').map(([url,label=''])=>({url,label}))};
         try{await auth.request(selectedPlace?`/api/admin/tourism/${selectedPlace.id}`:'/api/admin/tourism',{method:selectedPlace?'PATCH':'POST',body});byId('tourism-editor').close();message('Đã lưu điểm du lịch.');await Promise.all([load('tourism'),stats()]);}catch(error){if(!denied(error))message(error.message,true,'tourism-editor-message');}finally{submit.disabled=false;}
     });
     byId('user-form').addEventListener('submit',async event=>{

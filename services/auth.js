@@ -138,7 +138,7 @@ function registerAuth(app, pool, options = {}) {
     }));
     app.get('/api/me/favorites',api(async(req,res)=>{
         const user=await requireUser(req);
-        const rows=(await pool.query(`SELECT d.id,d.ten_dia_diem,p.ten_tinh,f.created_at,f.collection FROM user_favorites f
+        const rows=(await pool.query(`SELECT d.id,d.slug,d.ten_dia_diem,p.ten_tinh,f.created_at,f.collection FROM user_favorites f
             JOIN diem_du_lich d ON d.id=f.tourism_id LEFT JOIN ranh_gioi_tinh p ON p.ma_tinh=d.ma_tinh
             WHERE f.user_id=$1 AND d.deleted_at IS NULL ORDER BY f.created_at DESC`,[user.id])).rows;
         res.json({items:rows});

@@ -380,6 +380,9 @@
                 popup.append(element('h3', '', props.ten_dia_diem || 'Điểm du lịch'), element('span', 'card-category', props.loai_hinh || category.label || 'Khám phá'));
                 if (props.mo_ta_ngan) popup.append(element('p', '', props.mo_ta_ngan));
                 if (props.ten_tinh) popup.append(element('p', 'card-location', props.ten_tinh));
+                const detailsLink=element('a','secondary-button popup-directions','Khám phá câu chuyện & thông tin tham quan');
+                detailsLink.href=props.slug?`/diem-den/${props.slug}`:`/diem-den/id/${props.id}`;
+                popup.append(detailsLink);
                 if (routingUI) {
                     const directions = element('button', 'primary-button popup-directions', 'Chỉ đường đến đây');
                     directions.type = 'button';

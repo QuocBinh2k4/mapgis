@@ -1,4 +1,5 @@
 const { ApiError } = require('./auth');
+const { contentInput, assignSlug } = require('./destination-content');
 function pagination(query) {
     const page=Number(query.page || 1), limit=Number(query.limit || 25);
     if (!Number.isSafeInteger(page) || page<1 || page>100000 || !Number.isSafeInteger(limit) || limit<1 || limit>100) throw new ApiError('Phân trang không hợp lệ.');
@@ -30,10 +31,10 @@ function tourismInput(body) {
         let url; try { url=new URL(image); } catch { throw new ApiError('Đường dẫn ảnh không hợp lệ.'); }
         if (!['https:','http:'].includes(url.protocol) || url.username || url.password) throw new ApiError('Ảnh phải dùng đường dẫn HTTP hoặc HTTPS.');
     }
-    return {name,lat,lng,category,address:optional('dia_chi',2000),description:optional('mo_ta_ngan',500),image};
+    return {name,lat,lng,category,address:optional('dia_chi',2000),description:optional('mo_ta_ngan',500),image,details:contentInput(body.chi_tiet)};
 }
 const tourismColumns = `d.id,d.ten_dia_diem,d.loai_id,d.ma_tinh,d.dia_chi,d.mo_ta_ngan,d.hinh_anh_url,
-    d.deleted_at,d.updated_at,d.version,ST_X(ST_Transform(d.geom,4326)) AS lng,ST_Y(ST_Transform(d.geom,4326)) AS lat,p.ten_tinh,l.ten_loai`;
+    d.slug,d.chi_tiet,d.deleted_at,d.updated_at,d.version,ST_X(ST_Transform(d.geom,4326)) AS lng,ST_Y(ST_Transform(d.geom,4326)) AS lat,p.ten_tinh,l.ten_loai`;
 function registerAdmin(app,pool,auth) {
     const {api,requireAdmin,publicUser}=auth;
     async function mutation(req,action,resourceType,resourceId,callback) {
@@ -151,7 +152,9 @@ function registerAdmin(app,pool,auth) {
             const province=await resolvePlace(client,input);
             const place=(await client.query(`INSERT INTO diem_du_lich(ten_dia_diem,loai_id,ma_tinh,dia_chi,mo_ta_ngan,hinh_anh_url,geom,created_by,updated_by)
                 VALUES($1,$2,$3,$4,$5,$6,ST_SetSRID(ST_MakePoint($7,$8),4326),$9,$9) RETURNING id`,[input.name,input.category,province,input.address,input.description,input.image,input.lng,input.lat,actor.id])).rows[0];
-            return {resourceId:place.id,data:{id:place.id},changes:{name:input.name,province}};
+            const slug=await assignSlug(client,place.id,input.name);
+            if(input.details!==undefined)await client.query('UPDATE diem_du_lich SET chi_tiet=$1::jsonb WHERE id=$2',[JSON.stringify(input.details),place.id]);
+            return {resourceId:place.id,data:{id:place.id,slug},changes:{name:input.name,province,details:input.details}};
         }); res.status(201).json(data);
     }));
     app.patch('/api/admin/tourism/:id',api(async(req,res)=>{
@@ -164,7 +167,9 @@ function registerAdmin(app,pool,auth) {
             const province=await resolvePlace(client,input);
             await client.query(`UPDATE diem_du_lich SET ten_dia_diem=$1,loai_id=$2,ma_tinh=$3,dia_chi=$4,mo_ta_ngan=$5,hinh_anh_url=$6,
                 geom=ST_SetSRID(ST_MakePoint($7,$8),4326),updated_by=$9,updated_at=now(),version=version+1 WHERE id=$10`,[input.name,input.category,province,input.address,input.description,input.image,input.lng,input.lat,actor.id,id]);
-            return {data:{id},changes:{before:{name:current.ten_dia_diem},after:{name:input.name,province}}};
+            if(input.details!==undefined)await client.query('UPDATE diem_du_lich SET chi_tiet=$1::jsonb WHERE id=$2',[JSON.stringify(input.details),id]);
+            await assignSlug(client,id,input.name);
+            return {data:{id},changes:{before:{name:current.ten_dia_diem},after:{name:input.name,province,details:input.details}}};
         }); res.json(data);
     }));
     app.patch('/api/admin/tourism/:id/visibility',api(async(req,res)=>{

@@ -1,6 +1,7 @@
 const { createClient } = require('./db');
 const fs = require('fs');
 const path = require('path');
+const { backfillSlugs } = require('../services/destination-content');
 
 async function ensureSchema(client) {
     await client.query(`CREATE EXTENSION IF NOT EXISTS postgis;
@@ -22,6 +23,8 @@ async function ensureSchema(client) {
         CREATE INDEX IF NOT EXISTS diem_du_lich_geom_idx ON diem_du_lich USING gist(geom);`);
     await client.query(fs.readFileSync(path.join(__dirname, '..', 'sql', 'users-admin.sql'), 'utf8'));
     await client.query(fs.readFileSync(path.join(__dirname, '..', 'sql', 'journeys.sql'), 'utf8'));
+    await client.query(fs.readFileSync(path.join(__dirname, '..', 'sql', 'destinations.sql'), 'utf8'));
+    await backfillSlugs(client);
 }
 if (require.main === module) {
     (async () => {

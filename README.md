@@ -35,6 +35,24 @@ Hai mẫu **3 ngày Hà Giang** và **2 ngày Hội An** tạo bản nháp bằn
 
 Chạy `npm run db:init` khi cập nhật: migration `sql/journeys.sql` chuyển yêu thích cũ sang **Muốn đi** và tạo bảng `user_itineraries`. Kiểm tra bằng `npm run journeys:test` và `npm run favorites:test`.
 
+## Trang chi tiết điểm đến
+
+Mỗi điểm có URL riêng `/diem-den/<slug>` (ví dụ `/diem-den/chua-cau`), mở từ popup bản đồ, bộ sưu tập hoặc lịch trình. Slug được lưu trong database, tự xử lý trùng tên và giữ nguyên khi đổi tên điểm đến. URL `/diem-den/id/<id>` chuyển hướng 308 tới slug để các link theo ID vẫn sử dụng được. Điểm đang ẩn trả HTTP 404 và không có trong sitemap.
+
+Trang trả HTML từ server với câu chuyện, thư viện tối đa 8 ảnh (chú thích và tác giả), giờ mở cửa, giá vé, mùa đẹp nhất, cách di chuyển và lưu ý văn hóa. Có canonical, Open Graph, JSON-LD `TouristAttraction`, `/sitemap.xml` và `/robots.txt`. Cấu hình `APP_ORIGIN` thành domain HTTPS thực tế trước khi triển khai để canonical và sitemap trỏ đúng website; có thể gửi sitemap trong Google Search Console. Các thành phần này hỗ trợ Google đọc nội dung, không đảm bảo được lập chỉ mục hay hiển thị rich result.
+
+**Điểm gần đây** lấy tối đa 6 điểm trong bán kính 30 km, sắp theo khoảng cách đường chim bay bằng PostGIS. **Có thể bạn cũng thích** chọn tối đa 6 điểm cùng loại hình, ưu tiên cùng tỉnh, loại điểm hiện tại và các điểm đã gợi ý gần đây. Gợi ý dùng dữ liệu điểm đến, không phụ thuộc tài khoản.
+
+Vào `/admin` → **Sửa điểm du lịch** → **Nội dung trang chi tiết** để biên tập. Gallery: mỗi dòng `URL | chú thích | tác giả/nguồn`; nguồn tham khảo: mỗi dòng `URL | tên nguồn`. Để trống các thông tin chưa có; trang hiển thị **Đang cập nhật** thay vì tự suy đoán giờ hoặc giá. Nội dung được kiểm tra độ dài và URL, escape trước khi xuất HTML và lưu cùng nhật ký quản trị.
+
+```powershell
+npm run db:init
+npm run destinations:seed
+npm run destinations:test
+```
+
+`db:init` áp dụng `sql/destinations.sql` và tạo slug cho dữ liệu cũ. Import sau này tự tạo slug cho điểm mới, giữ nội dung đã biên tập khi refresh OSM. `destinations:seed` bổ sung giờ/phí từ các tag OpenStreetMap đã có, ghi rõ **chưa xác minh**, và thêm câu chuyện/gallery tư liệu cho Chùa Cầu Hội An nếu mục tương ứng còn trống. Nội dung mẫu tham khảo [Trung tâm Quản lý Bảo tồn Di sản Văn hóa Hội An](https://hoianheritage.danang.gov.vn/vi/di-san-van-hoa/Cau/Chua-Cau-134.html); ảnh Wikimedia có ghi năm chụp, tác giả, link nguồn và giấy phép CC BY-SA 4.0. Chạy lại seed không thay nội dung đã điền.
+
 ## Nhập dữ liệu lần đầu
 
 ```powershell

@@ -8,6 +8,7 @@ const { registerAuth } = require('./services/auth');
 const { registerAdmin } = require('./services/admin');
 const { registerData } = require('./services/data');
 const { registerJourneys } = require('./services/journeys');
+const { registerDestinations } = require('./services/destinations');
 
 const app = express();
 const pool = new Pool(databaseConfig());
@@ -19,7 +20,7 @@ app.use((req,res,next)=>{
     res.set('Referrer-Policy',req.hostname==='localhost' ? 'no-referrer-when-downgrade' : 'strict-origin-when-cross-origin');
     next();
 });
-app.use(express.json({ limit: '16kb' }));
+app.use(express.json({ limit: '48kb' }));
 app.use((error, req, res, next) => {
     if (error.type === 'entity.parse.failed') return res.status(400).json({ error: 'Nội dung yêu cầu JSON không hợp lệ.' });
     if (error.type === 'entity.too.large') return res.status(413).json({ error: 'Nội dung yêu cầu quá lớn.' });
@@ -30,6 +31,7 @@ const auth=registerAuth(app,pool);
 registerJourneys(app,pool,auth);
 registerAdmin(app,pool,auth);
 registerData(app,pool);
+registerDestinations(app,pool);
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/account', (req,res)=>res.sendFile(path.join(__dirname,'public','account.html')));

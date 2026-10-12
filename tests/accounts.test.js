@@ -9,6 +9,8 @@ const {registerAuth}=require('../services/auth');
 const {registerAdmin,tourismInput}=require('../services/admin');
 const {registerData}=require('../services/data');
 const {registerJourneys}=require('../services/journeys');
+const {registerDestinations}=require('../services/destinations');
+const {backfillSlugs}=require('../services/destination-content');
 const {validateRequest}=require('../services/routing');
 const {routeValhalla}=require('../services/valhalla');
 
@@ -60,10 +62,13 @@ test('Google registration, sessions, CSRF, admin permissions and tourism lifecyc
             INSERT INTO ${schema}.diem_du_lich(ten_dia_diem,loai_id,ma_tinh,geom) VALUES('Điểm có sẵn',1,'01',ST_SetSRID(ST_MakePoint(105.5,21.5),4326))`);
         await client.query(rewrite(fs.readFileSync(path.join(__dirname,'../sql/users-admin.sql'),'utf8')));
         await client.query(rewrite(fs.readFileSync(path.join(__dirname,'../sql/journeys.sql'),'utf8')));
+        await client.query(rewrite(fs.readFileSync(path.join(__dirname,'../sql/destinations.sql'),'utf8')));
+        await backfillSlugs(pool);
         const app=express();app.use(express.json());
         const auth=registerAuth(app,pool,{clientId:'test.apps.googleusercontent.com',origin:'http://localhost:3000',adminEmails:'admin@gmail.com,outside@example.com',verifyCredential:async credential=>{verificationCalls++;if(!payloads.has(credential))throw Error('Invalid Google token');return payloads.get(credential);}});
         registerAdmin(app,pool,auth);registerData(app,pool);
         registerJourneys(app,pool,auth);
+        registerDestinations(app,pool,{origin:'https://mapgis.example'});
         server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));base=`http://127.0.0.1:${server.address().port}`;
         const guest=browser(),member=browser(),admin=browser();let memberSession,adminSession;
         await t.test('unauthenticated visitors cannot read admin records',async()=>{
@@ -151,20 +156,40 @@ test('Google registration, sessions, CSRF, admin permissions and tourism lifecyc
         });
         let place,placeBody;
         await t.test('admin can create and edit tourism points with spatial province assignment and optimistic concurrency',async()=>{
-            placeBody={ten_dia_diem:"Điểm du lịch O'Brien",loai_id:1,lat:21.55,lng:105.55,mo_ta_ngan:'Mô tả thử'};
+            placeBody={ten_dia_diem:"Điểm du lịch O'Brien",loai_id:1,lat:21.55,lng:105.55,mo_ta_ngan:'Mô tả thử',chi_tiet:{story:'Câu chuyện điểm thử',opening_hours:'08:00–17:00',ticket_price:'Đang cập nhật',gallery:[{url:'https://images.example/a.jpg',caption:'Ảnh thử'}]}};
             assert.equal((await member.request('/api/admin/tourism','POST',placeBody,memberSession.csrfToken)).status,403);
             assert.equal((await admin.request('/api/admin/tourism','POST',placeBody,'wrong')).status,403);
             const created=await admin.request('/api/admin/tourism','POST',placeBody,adminSession.csrfToken);assert.equal(created.status,201);place=created.data.id;
             const detail=(await admin.request('/api/admin/tourism?q=O%27Brien')).data.items[0];assert.equal(detail.ma_tinh,'01');assert.equal(detail.lng,105.55);
+            assert.ok(detail.slug);assert.equal(detail.chi_tiet.story,'Câu chuyện điểm thử');
             assert.equal((await admin.request(`/api/admin/tourism/${place}`,'PATCH',{...placeBody,lat:50,lng:100,version:1},adminSession.csrfToken)).status,400);
             assert.equal((await admin.request(`/api/admin/tourism/${place}`,'PATCH',{...placeBody,ten_dia_diem:'Điểm đã sửa',version:1},adminSession.csrfToken)).status,200);
             assert.equal((await admin.request(`/api/admin/tourism/${place}`,'PATCH',{...placeBody,version:1},adminSession.csrfToken)).status,409);
         });
+        await t.test('destination pages render server-side, preserve slugs on rename and expose only public recommendations',async()=>{
+            const original=(await pool.query('SELECT slug FROM diem_du_lich WHERE id=$1',[place])).rows[0].slug;
+            const response=await fetch(base+`/diem-den/${original}`);assert.equal(response.status,200);
+            const html=await response.text();assert.match(html,/Câu chuyện điểm thử/);assert.match(html,/08:00–17:00/);
+            assert.ok(html.includes(`href="https://mapgis.example/diem-den/${original}"`));
+            const data=(await guest.request(`/api/destinations/${original}`)).data;
+            assert.equal(data.place.ten_dia_diem,'Điểm đã sửa');assert.equal(data.place.chi_tiet.story,'Câu chuyện điểm thử');
+            assert.ok(data.nearby.some(p=>p.id===1));assert.ok(data.nearby.every(p=>p.id!==place));
+            assert.ok(!('updated_by' in data.place));
+            const redirect=await fetch(base+`/diem-den/id/${place}`,{redirect:'manual'});assert.equal(redirect.status,308);assert.equal(redirect.headers.get('location'),`/diem-den/${original}`);
+            const sitemap=await (await fetch(base+'/sitemap.xml')).text();assert.ok(sitemap.includes(`/diem-den/${original}`));
+            const unknown=await fetch(base+'/diem-den/no-such-place');assert.equal(unknown.status,404);assert.match(await unknown.text(),/noindex/);
+            await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:true,version:2},adminSession.csrfToken);
+            assert.equal((await fetch(base+`/diem-den/${original}`)).status,404);
+            assert.equal((await guest.request(`/api/destinations/${original}`)).status,404);
+            assert.ok(!(await (await fetch(base+'/sitemap.xml')).text()).includes(`/diem-den/${original}`));
+            assert.ok(!(await guest.request('/api/destinations/diem-co-san')).data.nearby.some(p=>p.id===place));
+            await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:false,version:3},adminSession.csrfToken);
+        });
         await t.test('archived tourism is hidden from the map and routing, then can be restored',async()=>{
-            assert.equal((await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:true,version:2},adminSession.csrfToken)).status,200);
+            assert.equal((await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:true,version:4},adminSession.csrfToken)).status,200);
             assert.ok(!(await guest.request('/api/diemdulich')).data.features.some(feature=>feature.properties.id===place));
             await assert.rejects(routeValhalla(pool,{start:{lat:21.5,lng:105.5},destinationId:place,mode:'car'},null,validateRequest),{status:404});
-            assert.equal((await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:false,version:3},adminSession.csrfToken)).status,200);
+            assert.equal((await admin.request(`/api/admin/tourism/${place}/visibility`,'PATCH',{archived:false,version:5},adminSession.csrfToken)).status,200);
             assert.ok((await guest.request('/api/diemdulich')).data.features.some(feature=>feature.properties.id===place));
         });
         await t.test('blocking an account revokes its session and preserves favorites for admin management',async()=>{

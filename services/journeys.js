@@ -74,7 +74,7 @@ function registerJourneys(app, pool, auth) {
             WHERE i.share_token=$1 AND u.status='active'`,[req.params.token])).rows[0];
         if (!item) throw new ApiError('Link không tồn tại hoặc đã ngừng chia sẻ.',404);
         const ids = [...new Set(item.days.flatMap(day => day.places))];
-        const places = (await pool.query(`SELECT d.id,d.ten_dia_diem,p.ten_tinh FROM diem_du_lich d LEFT JOIN ranh_gioi_tinh p ON p.ma_tinh=d.ma_tinh
+        const places = (await pool.query(`SELECT d.id,d.slug,d.ten_dia_diem,p.ten_tinh FROM diem_du_lich d LEFT JOIN ranh_gioi_tinh p ON p.ma_tinh=d.ma_tinh
             WHERE d.id=ANY($1::int[]) AND d.deleted_at IS NULL`,[ids])).rows;
         res.json({item,places});
     }));

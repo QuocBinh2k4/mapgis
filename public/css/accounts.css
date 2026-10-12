@@ -19,6 +19,10 @@
 .editor-form input, .editor-form select, .editor-form textarea, .admin-toolbar input, .admin-toolbar select { width: 100%; padding: 11px 12px; border: 1px solid #ccddd5; border-radius: 8px; color: var(--ink); font: inherit; background: white; font-size: 13px; }
 .editor-form input[readonly] { background: #f4f7f5; color: var(--muted); }
 .editor-form textarea { resize: vertical; min-height: 95px; }
+.destination-editor-fields { border:1px solid var(--border); border-radius:10px; padding:18px; display:grid; gap:12px; min-width:0; }
+.destination-editor-fields legend { font-weight:600; padding:0 8px; }
+.destination-editor-fields textarea { min-height:75px; }
+#place-story { min-height:150px; }
 .editor-form .primary-button { justify-self: start; }
 .editor-form .muted { margin: 0; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }

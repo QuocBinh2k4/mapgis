@@ -3,7 +3,7 @@ function registerData(app,pool) {
         try {
             const result=await pool.query(`SELECT json_build_object('type','FeatureCollection','features',
                 COALESCE(json_agg(json_build_object('type','Feature','geometry',ST_AsGeoJSON(ST_Transform(d.geom,4326))::json,
-                    'properties',json_build_object('id',d.id,'ten_dia_diem',d.ten_dia_diem,'mo_ta_ngan',d.mo_ta_ngan,
+                    'properties',json_build_object('id',d.id,'slug',d.slug,'ten_dia_diem',d.ten_dia_diem,'mo_ta_ngan',d.mo_ta_ngan,
                         'hinh_anh',d.hinh_anh_url,'ma_tinh',d.ma_tinh,'ten_tinh',t.ten_tinh,'loai_hinh',l.ten_loai,'ma_loai',l.ma_loai)
                 ) ORDER BY d.id),'[]'::json)) AS geojson FROM diem_du_lich d
                 LEFT JOIN danh_muc_loai l ON d.loai_id=l.id LEFT JOIN ranh_gioi_tinh t ON d.ma_tinh=t.ma_tinh

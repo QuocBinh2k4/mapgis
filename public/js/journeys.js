@@ -29,7 +29,7 @@
     function newTrip() { if(canReplace()) openTrip({title:'Chuyến đi của tôi',days:[{places:[]}],version:1}); }
     function placeLink(id) {
         const place=places.get(id), a=node('a',place?.ten_dia_diem || 'Điểm đến đã bị xóa');
-        if(place) a.href=`/?place=${id}`;
+        if(place) a.href=place.slug?`/diem-den/${place.slug}`:`/diem-den/id/${id}`;
         return a;
     }
     function renderLibrary() {

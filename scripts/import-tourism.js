@@ -197,6 +197,7 @@ async function main() {
                 [JSON.stringify(sourceRows.slice(offset, offset + 500)), source.downloadedAt, source.osmTimestamp || null]);
             }
         }
+        if (apply) await require('../services/destination-content').backfillSlugs(client);
         report.byProvince = (await client.query(`SELECT p.ma_tinh,p.ten_tinh,count(m.source_key)::int AS source_records
             FROM tourism_provinces p LEFT JOIN tourism_mapped m ON m.ma_tinh=p.ma_tinh GROUP BY p.ma_tinh,p.ten_tinh ORDER BY p.ma_tinh`)).rows;
         if (apply) {
