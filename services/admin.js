@@ -1,5 +1,5 @@
 const { ApiError } = require('./auth');
-const { contentInput, assignSlug } = require('./destination-content');
+const { contentInput, assignSlug, imageUrl } = require('./destination-content');
 const express = require('express');
 const { randomUUID } = require('node:crypto');
 const uploadImageBody = express.raw({type:'*/*',limit:'4mb'});
@@ -29,11 +29,8 @@ function tourismInput(body) {
         if (typeof value!=='string' || value.length>max) throw new ApiError(`Trường ${key} không hợp lệ hoặc quá dài.`);
         return value.trim() || null;
     };
-    const image=optional('hinh_anh_url',2048);
-    if (image) {
-        let url; try { url=new URL(image); } catch { throw new ApiError('Đường dẫn ảnh không hợp lệ.'); }
-        if (!['https:','http:'].includes(url.protocol) || url.username || url.password) throw new ApiError('Ảnh phải dùng đường dẫn HTTP hoặc HTTPS.');
-    }
+    const rawImage=optional('hinh_anh_url',2048),image=imageUrl(rawImage);
+    if(rawImage&&!image)throw new ApiError('Link ảnh không dùng được trực tiếp. Hãy nhập link file ảnh hoặc tải ảnh lên.');
     return {name,lat,lng,category,address:optional('dia_chi',2000),description:optional('mo_ta_ngan',500),image,details:contentInput(body.chi_tiet)};
 }
 const tourismColumns = `d.id,d.ten_dia_diem,d.loai_id,d.ma_tinh,d.dia_chi,d.mo_ta_ngan,d.hinh_anh_url,

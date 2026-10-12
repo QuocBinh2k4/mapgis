@@ -29,6 +29,8 @@
         KHU_DU_LICH: { label: 'Khu du lịch - Vui chơi', icon: 'fa-umbrella-beach', color: '#087fbd' },
         BAO_TANG: { label: 'Bảo tàng - Triển lãm', icon: 'fa-building-columns', color: '#bd586d' }
     };
+    const coverFor = type => `/images/covers/${({DI_TICH:'heritage',DANH_LAM:'nature',TAM_LINH:'spiritual',KHU_DU_LICH:'resort',BAO_TANG:'museum'})[type] || 'nature'}.svg`;
+    const coverImage = (type,alt='Minh họa theo loại hình địa điểm') => { const image=element('img','spot-cover-fallback');image.src=coverFor(type);image.alt=alt;image.loading='lazy';return image; };
     const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim();
     const element = (tag, className, text) => {
         const node = document.createElement(tag);
@@ -192,9 +194,13 @@
             const image = imageFor(props);
             if (image) {
                 thumbnail.firstChild.hidden = true;
-                image.addEventListener('error', () => { thumbnail.firstChild.hidden = false; }, { once: true });
+                image.addEventListener('error', () => {
+                    thumbnail.firstChild.hidden = false;
+                    thumbnail.classList.add('card-image-fallback');
+                    thumbnail.style.backgroundImage = `url("${coverFor(props.ma_loai)}")`;
+                }, { once: true });
                 thumbnail.append(image);
-            }
+            } else { thumbnail.classList.add('card-image-fallback'); thumbnail.style.backgroundImage = `url("${coverFor(props.ma_loai)}")`; }
             const info = element('span', 'info');
             info.append(element('span', 'card-category', props.loai_hinh || category?.label || 'Khám phá'));
             info.append(element('strong', 'card-title', props.ten_dia_diem || 'Điểm du lịch'));
@@ -390,7 +396,10 @@
                 });
                 const popup = element('div', 'spot-popup');
                 const image = imageFor(props);
-                if (image) popup.append(image);
+                const cover=element('div','spot-popup-image');
+                if(image){cover.append(image);image.addEventListener('error',()=>cover.append(coverImage(props.ma_loai)),{once:true});}
+                else cover.append(coverImage(props.ma_loai));
+                popup.append(cover);
                 popup.append(element('h3', '', props.ten_dia_diem || 'Điểm du lịch'), element('span', 'card-category', props.loai_hinh || category.label || 'Khám phá'));
                 if (props.mo_ta_ngan) popup.append(element('p', '', props.mo_ta_ngan));
                 if (props.ten_tinh) popup.append(element('p', 'card-location', props.ten_tinh));

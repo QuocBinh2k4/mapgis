@@ -8,11 +8,13 @@
 #destination-status:empty { display:none; }
 #destination-share-url { width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; margin-bottom:16px; }
 .destination-gallery { position:relative; margin:28px 0 38px; border-radius:18px; overflow:hidden; background:#e8f0e8; }
-.destination-gallery figure { margin:0; }
+.destination-gallery figure { margin:0; background-size:cover; background-position:center; }
 .destination-gallery img { display:block; width:100%; height:clamp(230px,44vw,490px); object-fit:cover; }
 .destination-gallery figcaption { background:white; padding:15px 22px; line-height:1.5; color:var(--muted); font-size:13px; }
 .gallery-controls { display:flex; justify-content:center; align-items:center; gap:18px; padding:12px; }
 .gallery-empty { min-height:240px; display:grid; place-content:center; text-align:center; color:var(--muted); background:linear-gradient(120deg,#e6f2e8,#f5f2df); }
+.gallery-empty img { width:100%; height:clamp(230px,44vw,490px); object-fit:cover; }
+.gallery-empty p { margin:0; padding:12px; background:#fff; }
 .gallery-empty span { font-size:50px; color:var(--primary); }
 .destination-layout { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:46px; align-items:start; }
 .destination-story h2,.destination-related h2 { font-size:25px; margin:15px 0; }

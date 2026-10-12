@@ -1,3 +1,4 @@
+const { imageUrl } = require('./destination-content');
 function registerData(app,pool) {
     app.get('/api/diemdulich',async(req,res)=>{
         try {
@@ -8,7 +9,9 @@ function registerData(app,pool) {
                 ) ORDER BY d.id),'[]'::json)) AS geojson FROM diem_du_lich d
                 LEFT JOIN danh_muc_loai l ON d.loai_id=l.id LEFT JOIN ranh_gioi_tinh t ON d.ma_tinh=t.ma_tinh
                 WHERE d.geom IS NOT NULL AND d.deleted_at IS NULL`);
-            res.json(result.rows[0].geojson);
+            const geojson=result.rows[0].geojson;
+            geojson.features.forEach(feature=>{feature.properties.hinh_anh=imageUrl(feature.properties.hinh_anh);});
+            res.json(geojson);
         }catch(error){console.error('Lỗi lấy điểm du lịch:',error.message);res.status(500).json({error:'Không lấy được điểm du lịch từ cơ sở dữ liệu.'});}
     });
     app.get('/api/ranhgioi',async(req,res)=>{

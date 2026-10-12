@@ -90,6 +90,7 @@
         contentKeys.forEach(key=>{byId(`place-${key}`).value=details[key] || '';});
         byId('place-gallery').value=(details.gallery || []).map(item=>[item.url,item.caption || '',item.credit || ''].join(' | ')).join('\n');
         byId('place-sources').value=(details.sources || []).map(item=>[item.url,item.label || ''].join(' | ')).join('\n');
+        updateImagePreview();
         byId('tourism-editor').showModal();
         requestAnimationFrame(()=>{
             if(!window.L)return;
@@ -98,6 +99,16 @@
             if(place)editorPosition();else editorMap.setView([16,106],5);
         });
     }
+    function updateImagePreview() {
+        const url=byId('place-image').value.trim(),wrap=byId('place-image-preview-wrap'),image=byId('place-image-preview'),status=byId('place-image-preview-status');
+        wrap.hidden=!url;if(!url)return;
+        status.textContent='Đang kiểm tra link ảnh…';image.hidden=false;
+        image.onload=()=>{status.textContent='Ảnh tải được.';};
+        image.onerror=()=>{image.hidden=true;status.textContent='Không tải được ảnh từ link này. Hãy dùng link file ảnh trực tiếp hoặc tải ảnh lên.';};
+        const wiki=url.match(/^https?:\/\/(?:[a-z-]+\.)?wikipedia\.org\/wiki\/(?:File|Image):(.+)$/i);
+        image.src=wiki?`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(decodeURIComponent(wiki[1]))}`:url;
+    }
+    byId('place-image').addEventListener('input',updateImagePreview);
     async function uploadImage(file) {
         if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Chọn ảnh JPEG, PNG hoặc WebP.');
         if(file.size>4*1024*1024)throw new Error('Mỗi ảnh tối đa 4 MB.');
@@ -107,7 +118,7 @@
     byId('place-image-file').addEventListener('change',async event=>{
         const file=event.currentTarget.files[0];if(!file)return;
         event.currentTarget.disabled=true;
-        try{const image=await uploadImage(file);byId('place-image').value=image.url;message('Đã tải ảnh bìa lên. Lưu điểm du lịch để áp dụng ảnh.',false,'tourism-editor-message');}
+        try{const image=await uploadImage(file);byId('place-image').value=image.url;updateImagePreview();message('Đã tải ảnh bìa lên. Lưu điểm du lịch để áp dụng ảnh.',false,'tourism-editor-message');}
         catch(error){if(!denied(error))message(error.message,true,'tourism-editor-message');}
         finally{event.currentTarget.disabled=false;event.currentTarget.value='';}
     });

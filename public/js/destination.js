@@ -14,9 +14,11 @@
         if(event.key==='ArrowRight'){event.preventDefault();show(index+1);}
     });
     document.querySelectorAll('.destination-gallery img,.related-card img').forEach(image=>image.addEventListener('error',()=>{
+        const fallback=image.dataset.coverFallback;
+        if(fallback&&image.src!==new URL(fallback,location.href).href){image.src=fallback;image.alt='Hình minh họa theo loại địa điểm';return;}
         image.hidden=true;
         const note=document.createElement('p');note.className='muted';note.textContent='Ảnh hiện không tải được.';image.after(note);
-    },{once:true}));
+    }));
     document.getElementById('share-destination')?.addEventListener('click',async()=>{
         const url=document.querySelector('link[rel="canonical"]').href,status=document.getElementById('destination-status');
         try {

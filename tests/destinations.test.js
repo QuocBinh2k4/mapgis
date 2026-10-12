@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
-const {slugify,safeUrl,contentInput,backfillSlugs}=require('../services/destination-content');
+const {slugify,safeUrl,imageUrl,contentInput,backfillSlugs}=require('../services/destination-content');
 const {renderDestination,gallery}=require('../services/destinations');
 const {osmContent}=require('../scripts/seed-destination-content');
 
@@ -44,12 +44,18 @@ test('SSR includes story, practical content, canonical, images, crawlable sugges
     assert.equal(json['@type'],'TouristAttraction');assert.equal(json.geo.latitude,21);assert.equal(json.image.length,2);
     assert.equal((html.match(/data-gallery-slide/g) || []).length,2);
     const empty=renderDestination({...place,chi_tiet:{},mo_ta_ngan:'Mô tả đã có'},[],[],'https://mapgis.example');
-    assert.match(empty,/Mô tả đã có/);assert.match(empty,/Đang cập nhật/);assert.match(empty,/Thư viện ảnh đang được cập nhật/);
+    assert.match(empty,/Mô tả đã có/);assert.match(empty,/Đang cập nhật/);assert.match(empty,/Ảnh thật đang được cập nhật/);assert.match(empty,/\/images\/covers\/nature\.svg/);
 });
 
 test('gallery filters invalid URLs and duplicates while preserving the current cover',()=>{
     const images=gallery({ten_dia_diem:'Hồ Gươm',hinh_anh_url:'https://example.com/a.jpg',chi_tiet:{gallery:[{url:'javascript:alert(1)'},{url:'https://example.com/a.jpg',caption:'Ảnh'}]}});
     assert.equal(images.length,1);assert.equal(images[0].caption,'Ảnh');
+});
+
+test('cover links convert Wikimedia file pages and reject Google Photos share pages',()=>{
+    assert.equal(imageUrl('https://en.wikipedia.org/wiki/File:Example_photo.jpg'),'https://commons.wikimedia.org/wiki/Special:FilePath/Example_photo.jpg');
+    assert.equal(imageUrl('https://photos.app.goo.gl/example'),null);
+    assert.equal(imageUrl('https://images.example/place.jpg'),'https://images.example/place.jpg');
 });
 
 test('OSM opening hours and fees remain labelled as unverified and do not invent a price',()=>{

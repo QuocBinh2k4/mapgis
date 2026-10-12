@@ -3,6 +3,7 @@ const path = require('path');
 const { createClient } = require('./db');
 const { ensureSchema } = require('./schema');
 const { planTourism } = require('./tourism-plan');
+const { imageUrl } = require('../services/destination-content');
 
 const directory = path.join(__dirname, '..', 'data', 'tourism');
 const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -41,7 +42,7 @@ function prepare(data) {
         const category = classify(tags);
         const description = (tags['description:vi'] || tags.description || `${categories[category]}. Dữ liệu OpenStreetMap; chưa xác minh xếp hạng hoặc tình trạng hoạt động.`).slice(0, 500);
         const address = tags['addr:full'] || [tags['addr:housenumber'], tags['addr:street'], tags['addr:suburb'], tags['addr:city'], tags['addr:province']].filter(Boolean).join(', ') || null;
-        const image = /^https?:\/\//i.test(tags.image || '') ? tags.image : null;
+        const image = imageUrl(tags.image);
         records.push({ key, name: name.slice(0, 255), normalized: normalize(name), category, lat, lon, description, address, image, raw: item, coordinateMethod: item.type === 'node' ? 'osm_node' : 'osm_bbox_center' });
     }
     return { records, rejected };

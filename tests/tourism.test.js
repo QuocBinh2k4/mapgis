@@ -7,14 +7,18 @@ const { planTourism, distanceMeters } = require('../scripts/tourism-plan');
 test('OSM: ưu tiên tên Việt, giữ thứ tự kinh/vĩ độ, loại tọa độ lỗi', () => {
     const result = prepare({ elements: [
         { type: 'node', id: 1, lat: 21, lon: 105, tags: { name: 'Museum', 'name:vi': 'Bảo tàng', tourism: 'museum' } },
+        { type: 'node', id: 4, lat: 21, lon: 105, tags: { name: 'Link trang Wikimedia', image: 'https://en.wikipedia.org/wiki/File:Example.jpg' } },
+        { type: 'node', id: 5, lat: 21, lon: 105, tags: { name: 'Link chia sẻ', image: 'https://photos.app.goo.gl/example' } },
         { type: 'way', id: 2, center: { lat: 10, lon: 106 }, tags: { name: 'Chùa', amenity: 'place_of_worship' } },
         { type: 'node', id: 3, lat: 100, lon: 105, tags: { name: 'Lỗi' } }
     ] });
-    assert.equal(result.records.length, 2);
+    assert.equal(result.records.length, 4);
     assert.equal(result.rejected.length, 1);
     assert.equal(result.records[0].name, 'Bảo tàng');
     assert.equal(result.records[0].lon, 105);
-    assert.equal(result.records[1].coordinateMethod, 'osm_bbox_center');
+    assert.equal(result.records.find(row=>row.name==='Chùa').coordinateMethod, 'osm_bbox_center');
+    assert.equal(result.records.find(row=>row.name==='Link trang Wikimedia').image,'https://commons.wikimedia.org/wiki/Special:FilePath/Example.jpg');
+    assert.equal(result.records.find(row=>row.name==='Link chia sẻ').image,null);
     assert.equal(classify({ tourism: 'museum' }), 'BAO_TANG');
 });
 test('Kế hoạch nhập: mã nguồn có sẵn, trùng gần, khác tỉnh và ngoài ranh giới', () => {

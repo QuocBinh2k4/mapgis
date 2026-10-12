@@ -1,15 +1,16 @@
 const { api, ApiError } = require('./auth');
-const { safeUrl, assignSlug } = require('./destination-content');
+const { safeUrl, imageUrl, assignSlug } = require('./destination-content');
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const columns=`d.id,d.slug,d.ten_dia_diem,d.mo_ta_ngan,d.dia_chi,d.hinh_anh_url,d.chi_tiet,d.ma_tinh,d.loai_id,d.updated_at,
     p.ten_tinh,l.ten_loai,l.ma_loai,ST_X(d.geom) AS lng,ST_Y(d.geom) AS lat`;
 const joins='FROM diem_du_lich d LEFT JOIN ranh_gioi_tinh p ON p.ma_tinh=d.ma_tinh LEFT JOIN danh_muc_loai l ON l.id=d.loai_id';
+const coverPath=type=>`/images/covers/${({DI_TICH:'heritage',DANH_LAM:'nature',TAM_LINH:'spiritual',KHU_DU_LICH:'resort',BAO_TANG:'museum'})[type]||'nature'}.svg`;
 function gallery(place) {
     const items=Array.isArray(place.chi_tiet?.gallery)?place.chi_tiet.gallery:[];
-    const image=safeUrl(place.hinh_anh_url), result=[],used=new Set();
+    const image=imageUrl(place.hinh_anh_url), result=[],used=new Set();
     for(const item of [...items,...(image?[{url:image,caption:place.ten_dia_diem}]:[])]) {
-        const url=safeUrl(item?.url);
+        const url=imageUrl(item?.url);
         if(url && !used.has(url)){used.add(url);result.push({url,caption:String(item.caption || place.ten_dia_diem),credit:String(item.credit || '')});}
     }
     return result.slice(0,8);
@@ -21,11 +22,11 @@ function cards(items,empty) {
     if(!items.length)return `<p class="muted">${escape(empty)}</p>`;
     return `<div class="related-grid">${items.map(p=>{
         const image=gallery(p)[0],distance=p.distance_m==null?'':` · ${(p.distance_m/1000).toLocaleString('vi-VN',{maximumFractionDigits:1})} km`;
-        return `<a class="related-card" href="/diem-den/${escape(p.slug)}">${image?`<img src="${escape(image.url)}" alt="${escape(p.ten_dia_diem)}" loading="lazy" width="480" height="300">`:'<span class="related-placeholder" aria-hidden="true">✦</span>'}<div><small>${escape(p.ten_loai || 'Khám phá')}</small><h3>${escape(p.ten_dia_diem)}</h3><p>${escape(p.ten_tinh || 'Việt Nam')}${escape(distance)}</p></div></a>`;
+        return `<a class="related-card" href="/diem-den/${escape(p.slug)}">${image?`<img src="${escape(image.url)}" data-cover-fallback="${coverPath(p.ma_loai)}" alt="${escape(p.ten_dia_diem)}" loading="lazy" width="480" height="300">`:`<img src="${coverPath(p.ma_loai)}" alt="Minh họa ${escape(p.ten_loai||'điểm đến')}" loading="lazy" width="480" height="300">`}<div><small>${escape(p.ten_loai || 'Khám phá')}</small><h3>${escape(p.ten_dia_diem)}</h3><p>${escape(p.ten_tinh || 'Việt Nam')}${escape(distance)}</p></div></a>`;
     }).join('')}</div>`;
 }
 function renderDestination(place,nearby,recommended,origin) {
-    const content=place.chi_tiet || {}, images=gallery(place), canonical=`${origin}/diem-den/${place.slug}`;
+    const content=place.chi_tiet || {}, images=gallery(place), cover=coverPath(place.ma_loai), canonical=`${origin}/diem-den/${place.slug}`;
     const summary=description(place);
     const sources=(Array.isArray(content.sources)?content.sources:[]).filter(s=>safeUrl(s?.url));
     const facts=[['Giờ mở cửa',content.opening_hours],['Giá vé',content.ticket_price],['Mùa đẹp nhất',content.best_season]];
@@ -41,7 +42,7 @@ function renderDestination(place,nearby,recommended,origin) {
 <header class="site-header"><a class="brand" href="/"><span class="brand-icon" aria-hidden="true">✦</span><span><strong>Việt Nam Ơi<span class="brand-dot">.</span></strong><small>Mỗi điểm đến, một câu chuyện</small></span></a><nav aria-label="Điều hướng"><a class="nav-link" href="/">Bản đồ</a><a class="nav-link" href="/journeys">Lịch trình</a><a class="nav-link" href="/account" id="auth-link">Đăng nhập</a></nav></header>
 <main class="destination-main"><nav class="breadcrumbs" aria-label="Đường dẫn"><a href="/">Khám phá Việt Nam</a><span aria-hidden="true">/</span><span>${escape(place.ten_tinh || 'Điểm đến')}</span></nav>
 <section class="destination-heading"><span class="eyebrow">${escape(place.ten_loai || 'ĐIỂM ĐẾN')}</span><h1>${escape(place.ten_dia_diem)}</h1><p>${escape(place.dia_chi || place.ten_tinh || 'Việt Nam')}</p><div class="destination-actions"><a class="primary-button" href="/?place=${place.id}">Xem bản đồ & chỉ đường</a><a class="secondary-button" href="/journeys?place=${place.id}">Lưu bộ sưu tập / thêm lịch trình</a><button type="button" id="share-destination" class="secondary-button">Chia sẻ điểm đến</button></div><p id="destination-status" role="status" aria-live="polite"></p><input id="destination-share-url" aria-label="Link chia sẻ điểm đến" value="${escape(canonical)}" readonly hidden></section>
-<section class="destination-gallery" aria-label="Thư viện ảnh">${images.length?`${images.map((img,i)=>`<figure ${i?'hidden':''} data-gallery-slide><img src="${escape(img.url)}" alt="${escape(img.caption)}" width="1200" height="750" ${i?'loading="lazy"':'fetchpriority="high"'}><figcaption>${escape(img.caption)}${img.credit?` <span>· ${escape(img.credit)}</span>`:''}</figcaption></figure>`).join('')}<div class="gallery-controls" ${images.length<2?'hidden':''}><button type="button" id="gallery-prev" class="secondary-button" aria-label="Ảnh trước">←</button><span id="gallery-position" role="status" aria-live="polite">1 / ${images.length}</span><button type="button" id="gallery-next" class="secondary-button" aria-label="Ảnh tiếp theo">→</button></div>`:'<div class="gallery-empty"><span aria-hidden="true">✦</span><p>Thư viện ảnh đang được cập nhật.</p></div>'}</section>
+<section class="destination-gallery" aria-label="Thư viện ảnh">${images.length?`${images.map((img,i)=>`<figure style="background-image:url('${cover}')" ${i?'hidden':''} data-gallery-slide><img src="${escape(img.url)}" data-cover-fallback="${cover}" alt="${escape(img.caption)}" width="1200" height="750" ${i?'loading="lazy"':'fetchpriority="high"'}><figcaption>${escape(img.caption)}${img.credit?` <span>· ${escape(img.credit)}</span>`:''}</figcaption></figure>`).join('')}<div class="gallery-controls" ${images.length<2?'hidden':''}><button type="button" id="gallery-prev" class="secondary-button" aria-label="Ảnh trước">←</button><span id="gallery-position" role="status" aria-live="polite">1 / ${images.length}</span><button type="button" id="gallery-next" class="secondary-button" aria-label="Ảnh tiếp theo">→</button></div>`:`<div class="gallery-empty"><img src="${cover}" alt="Minh họa ${escape(place.ten_loai||'điểm đến')}" width="1200" height="750"><p>Ảnh thật đang được cập nhật · Hình minh họa theo loại địa điểm.</p></div>`}</section>
 <section class="community-photos" id="community-photos" data-tourism-id="${place.id}" aria-labelledby="community-photos-title"><h2 id="community-photos-title">Ảnh địa điểm do người dùng đăng</h2><p class="muted">Ảnh riêng tư: chỉ người đăng và quản trị viên được xem.</p><p id="community-photo-status" class="notice" role="status" aria-live="polite"></p><div id="community-photo-login"><a class="secondary-button" href="/account?return=${encodeURIComponent(`/diem-den/${place.slug}`)}">Đăng nhập để gửi ảnh</a></div><form id="community-photo-form" class="community-photo-form" hidden><label>Ảnh địa điểm<input id="community-photo-file" type="file" accept="image/jpeg,image/png,image/webp" required></label><label>Ghi chú (không bắt buộc)<input id="community-photo-caption" maxlength="500" placeholder="Điều muốn chia sẻ về bức ảnh"></label><button type="submit" class="primary-button">Gửi ảnh riêng tư</button></form><div id="community-photo-grid" class="related-grid" aria-live="polite"></div></section>
 <div class="destination-layout"><article class="destination-story" id="destination-story"><span class="eyebrow">MỖI ĐIỂM ĐẾN, MỘT CÂU CHUYỆN</span><h2>Câu chuyện nơi đây</h2><p class="destination-prose">${escape(content.story || place.mo_ta_ngan || 'Câu chuyện của điểm đến đang được biên tập. Hãy lưu lại để khám phá trong hành trình tiếp theo.')}</p>
 <section class="practical-section"><h2>Cách di chuyển</h2><p class="destination-prose">${escape(content.transport || 'Hướng dẫn di chuyển đang được cập nhật. Mở bản đồ và chọn “Chỉ đường đến đây” để tìm tuyến từ vị trí của bạn.')}</p><a href="/?place=${place.id}">Tìm đường trên bản đồ →</a></section>

@@ -9,6 +9,24 @@ function safeUrl(value) {
     try { const url=new URL(value); return ['https:','http:'].includes(url.protocol) && !url.username && !url.password ? url.href : null; }
     catch { return null; }
 }
+function imageUrl(value) {
+    if(typeof value!=='string'||value.length>2048)return null;
+    if(/^File:/i.test(value.trim()))return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(value.trim().replace(/^File:/i,''))}`;
+    const safe=safeUrl(value);if(!safe)return null;
+    const url=new URL(safe);
+    if(url.hostname==='photos.app.goo.gl'||url.hostname==='photos.google.com')return null;
+    if(/(?:^|\.)wikipedia\.org$/i.test(url.hostname)){
+        const match=url.pathname.match(/^\/wiki\/(?:File|Image):(.+)$/i);
+        if(match){let title;try{title=decodeURIComponent(match[1]);}catch{title=match[1];}
+            return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(title)}`;}
+    }
+    if(url.hostname==='commons.wikimedia.org'){
+        const match=url.pathname.match(/^\/wiki\/(?:File|Image):(.+)$/i);
+        if(match){let title;try{title=decodeURIComponent(match[1]);}catch{title=match[1];}
+            return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(title)}`;}
+    }
+    return safe;
+}
 function contentInput(value) {
     if (value===undefined) return undefined;
     if (!value || typeof value!=='object' || Array.isArray(value)) throw new ApiError('Thông tin chi tiết không hợp lệ.');
@@ -22,8 +40,8 @@ function contentInput(value) {
         if (value[key]===undefined) continue;
         if (!Array.isArray(value[key]) || value[key].length>max) throw new ApiError(`${key==='gallery'?'Thư viện ảnh':'Nguồn tham khảo'} tối đa ${max} mục.`);
         result[key]=value[key].map(item=>{
-            const url=safeUrl(item?.url);
-            if (!url) throw new ApiError('Đường dẫn phải dùng HTTP/HTTPS và không chứa thông tin đăng nhập.');
+            const url=key==='gallery'?imageUrl(item?.url):safeUrl(item?.url);
+            if (!url) throw new ApiError(key==='gallery'?'Ảnh phải là link file ảnh dùng trực tiếp hoặc tải ảnh lên.':'Đường dẫn phải dùng HTTP/HTTPS và không chứa thông tin đăng nhập.');
             const clean={url};
             for (const field of key==='gallery'?['caption','credit']:['label']) {
                 if (item[field]!=null && (typeof item[field]!=='string' || item[field].length>250)) throw new ApiError('Chú thích ảnh hoặc nguồn quá dài.');
@@ -60,4 +78,4 @@ async function backfillSlugs(client) {
     for(let i=0;i<changes.length;i+=500)await client.query(`UPDATE diem_du_lich d SET slug=x.slug
         FROM jsonb_to_recordset($1::jsonb) AS x(id int,slug text) WHERE d.id=x.id AND d.slug IS NULL`,[JSON.stringify(changes.slice(i,i+500))]);
 }
-module.exports={slugify,safeUrl,contentInput,assignSlug,backfillSlugs};
+module.exports={slugify,safeUrl,imageUrl,contentInput,assignSlug,backfillSlugs};
