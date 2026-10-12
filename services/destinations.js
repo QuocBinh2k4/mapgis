@@ -1,5 +1,5 @@
 const { api, ApiError } = require('./auth');
-const { safeUrl } = require('./destination-content');
+const { safeUrl, assignSlug } = require('./destination-content');
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const columns=`d.id,d.slug,d.ten_dia_diem,d.mo_ta_ngan,d.dia_chi,d.hinh_anh_url,d.chi_tiet,d.ma_tinh,d.loai_id,d.updated_at,
@@ -75,9 +75,10 @@ function registerDestinations(app,pool,options={}) {
         try {
             const id=Number(req.params.id);
             if(!Number.isSafeInteger(id) || id<1)return res.status(404).send(errorPage('Không tìm thấy điểm đến','Hãy chọn một điểm khác trên bản đồ.'));
-            const place=(await pool.query('SELECT slug FROM diem_du_lich WHERE id=$1 AND deleted_at IS NULL',[id])).rows[0];
-            if(!place?.slug)return res.status(404).send(errorPage('Không tìm thấy điểm đến','Hãy chọn một điểm khác trên bản đồ.'));
-            res.redirect(308,`/diem-den/${place.slug}`);
+            const place=(await pool.query('SELECT id,slug,ten_dia_diem FROM diem_du_lich WHERE id=$1 AND deleted_at IS NULL',[id])).rows[0];
+            if(!place)return res.status(404).send(errorPage('Không tìm thấy điểm đến','Hãy chọn một điểm khác trên bản đồ.'));
+            const slug=place.slug || await assignSlug(pool,place.id,place.ten_dia_diem);
+            res.redirect(308,`/diem-den/${slug}`);
         }catch(error){console.error('Destination redirect:',error.message);res.status(503).send(errorPage('Chưa tải được điểm đến','Vui lòng thử lại sau.'));}
     });
     app.get('/diem-den/:slug',async(req,res)=>{
