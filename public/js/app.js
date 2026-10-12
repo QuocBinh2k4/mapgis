@@ -134,7 +134,7 @@
                 && (!favoritesOnly || document.getElementById('map-collection').value === 'all' || !document.getElementById('map-collection').value || favorites.collection?.(props.id) === document.getElementById('map-collection').value)
                 && (selectedType === 'all' || props.ma_loai === selectedType)
                 && (!selectedProvince || normalize(props.ten_tinh) === normalize(selectedProvince))
-                && (!query || normalize(`${props.ten_dia_diem || ''} ${props.ten_tinh || ''}`).includes(query));
+                && (!query || normalize(`${props.ten_dia_diem || ''} ${props.ten_tinh || ''} ${props.dia_chi || ''} ${props.loai_hinh || ''}`).includes(query));
         });
         const visibleSet = new Set(visible);
         if (favoritesOnly) {
@@ -254,7 +254,21 @@
     });
     window.addEventListener('mapgis-favorites-change', () => { updateFavoriteViews(); if (favoritesOnly) renderSpots(); });
     updateFavoriteViews();
-    search.addEventListener('input', renderSpots);
+    search.addEventListener('input', () => {
+        if (search.value.trim()) {
+            // A new search should not be hidden by a province/category left over from map browsing.
+            if (selectedProvince) clearProvince();
+            if (selectedType !== 'all') {
+                selectedType = 'all';
+                document.querySelectorAll('.tag').forEach(tag => {
+                    const active = tag.dataset.type === 'all';
+                    tag.classList.toggle('active', active);
+                    tag.setAttribute('aria-pressed', String(active));
+                });
+            }
+        }
+        renderSpots();
+    });
     document.querySelectorAll('.tag').forEach(button => button.addEventListener('click', () => {
         selectedType = button.dataset.type;
         document.querySelectorAll('.tag').forEach(tag => {
