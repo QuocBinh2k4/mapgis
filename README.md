@@ -10,7 +10,7 @@ Copy-Item .env.example .env
 
 Nếu đã có `.env` thì chỉnh file hiện có, không ghi đè. Trên Vercel, thêm `DATABASE_URL` trong Environment Variables rồi redeploy. `.env` không được đưa lên Git. Đường dẫn kết nối phải có SSL, ví dụ `?sslmode=verify-full`.
 
-Ảnh do quản trị viên chọn cho trang địa danh nằm trong Blob store **Public**; Neon lưu URL tại `hinh_anh_url` và thư viện ảnh. Ảnh người dùng gửi nằm trong Blob store **Private** riêng; Neon lưu URL cùng mã người gửi và địa điểm. Endpoint ảnh riêng tư kiểm tra phiên đăng nhập, chỉ cho người gửi hoặc quản trị viên xem và không cache nội dung. Tạo cả hai Blob store cho project Vercel, bật Production/Preview, rồi đặt `BLOB_READ_WRITE_TOKEN` cho store Public và `PRIVATE_BLOB_READ_WRITE_TOKEN` cho store Private. Khi chạy local, kết nối môi trường Development rồi chạy `vercel env pull` hoặc thêm hai token vào `.env`. Chọn đúng chế độ Public/Private khi tạo store vì chế độ truy cập được xác định theo store ([tài liệu Vercel Blob](https://vercel.com/docs/vercel-blob/private-storage)).
+All destination images and user submitted photos use the same Public Vercel Blob store. Neon stores destination image URLs in `hinh_anh_url` and user photo URLs with uploader and destination IDs. The user photo API still requires sign in and restricts access to the uploader or an administrator. Create one Public Blob store for the Vercel project, enable Production/Preview, and set `BLOB_READ_WRITE_TOKEN`. For local development, link the Development environment and run `vercel env pull`, or add this token to `.env`.
 
 ## Tài khoản Google và trang admin
 

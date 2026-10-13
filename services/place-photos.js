@@ -55,8 +55,8 @@ function registerPlacePhotos(app, pool, auth) {
     api(async (req, res) => {
       const user = await requireUser(req, true),
         placeId = positiveId(req.params.id);
-      if (!process.env.PRIVATE_BLOB_READ_WRITE_TOKEN)
-        throw new ApiError("Chưa cấu hình kho ảnh riêng tư trên Vercel.", 503);
+      if (!process.env.BLOB_READ_WRITE_TOKEN)
+        throw new ApiError("Blob storage token is not configured.", 503);
       const mime = String(req.headers["content-type"] || "")
           .split(";")[0]
           .trim()
@@ -139,12 +139,12 @@ function registerPlacePhotos(app, pool, auth) {
       ).rows[0];
       if (!photo)
         return res.status(404).type("text/plain").send("Không tìm thấy ảnh.");
-      if (!process.env.PRIVATE_BLOB_READ_WRITE_TOKEN)
-        throw new ApiError("Chưa cấu hình kho ảnh riêng tư trên Vercel.", 503);
+      if (!process.env.BLOB_READ_WRITE_TOKEN)
+        throw new ApiError("Blob storage token is not configured.", 503);
       const { get } = await import("@vercel/blob");
       const blob = await get(photo.blob_url, {
-        access: "private",
-        token: process.env.PRIVATE_BLOB_READ_WRITE_TOKEN,
+        access: "public",
+        token: process.env.BLOB_READ_WRITE_TOKEN,
       });
       if (!blob || blob.statusCode !== 200 || !blob.stream)
         return res.status(404).type("text/plain").send("Không tìm thấy ảnh.");

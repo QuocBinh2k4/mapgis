@@ -52,7 +52,8 @@ function registerAdmin(app,pool,auth) {
         if(!Buffer.isBuffer(data) || !data.length || !signatures[mime]?.(data)) throw new ApiError('Chỉ nhận ảnh JPEG, PNG hoặc WebP hợp lệ, tối đa 4 MB.');
         const extension={'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[mime];
         const {put}=await import('@vercel/blob');
-        const blob=await put(`tourism/${randomUUID()}.${extension}`,data,{access:'public',contentType:mime,addRandomSuffix:true});
+        if(!process.env.BLOB_READ_WRITE_TOKEN)throw new ApiError('Blob storage token is not configured.',503);
+        const blob=await put(`tourism/${randomUUID()}.${extension}`,data,{access:'public',contentType:mime,addRandomSuffix:true,token:process.env.BLOB_READ_WRITE_TOKEN});
         res.status(201).json({url:blob.url,mime_type:mime,byte_size:data.length});
     }));
     async function mutation(req,action,resourceType,resourceId,callback) {
