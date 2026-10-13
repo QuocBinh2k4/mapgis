@@ -13,6 +13,8 @@
     "journeys:test": "node --test tests/journeys-ui.test.js tests/accounts.test.js",
     "destinations:test": "node --test tests/destinations.test.js tests/accounts.test.js",
     "destinations:seed": "node scripts/seed-destination-content.js",
+    "covers:update": "node scripts/update-wikidata-covers.js",
+    "covers:update:spatial": "node scripts/update-spatial-covers.js",
     "boundaries:download": "node scripts/download-boundaries.js",
     "boundaries:preview": "node scripts/import-boundaries.js",
     "boundaries:import": "node scripts/import-boundaries.js --apply",

@@ -47,6 +47,10 @@ function contentInput(value) {
                 if (item[field]!=null && (typeof item[field]!=='string' || item[field].length>250)) throw new ApiError('Chú thích ảnh hoặc nguồn quá dài.');
                 clean[field]=(item[field] || '').trim();
             }
+            if(key==='gallery' && item.source!=null) {
+                clean.source=safeUrl(item.source);
+                if(!clean.source)throw new ApiError('Gallery source must be a valid HTTP/HTTPS URL.');
+            }
             return clean;
         });
     }
